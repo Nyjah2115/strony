@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Przed publikacją podmień adres na swoją domenę:
+Sitemap: https://TWOJA-DOMENA.pl/sitemap.xml

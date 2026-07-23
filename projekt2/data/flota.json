@@ -1,0 +1,44 @@
+{
+  "pojazdy": [
+    {
+      "marka": "Scania R 500",
+      "typ": "Ciągnik siodłowy · 4×2",
+      "rok": 2021,
+      "przebieg": "456 000 km",
+      "moc": "500 KM",
+      "cena": "289 000 PLN",
+      "status": "Dostępny",
+      "kategoria": "ciagnik"
+    },
+    {
+      "marka": "Volvo FMX 460",
+      "typ": "Wywrotka · 8×4",
+      "rok": 2021,
+      "przebieg": "187 300 km",
+      "moc": "460 KM",
+      "cena": "415 000 PLN",
+      "status": "Dostępny",
+      "kategoria": "wywrotka"
+    },
+    {
+      "marka": "MAN TGX 18.510",
+      "typ": "Ciągnik siodłowy · 4×2",
+      "rok": 2022,
+      "przebieg": "298 500 km",
+      "moc": "510 KM",
+      "cena": "342 000 PLN",
+      "status": "Rezerwacja",
+      "kategoria": "ciagnik"
+    },
+    {
+      "marka": "DAF XF 480 + Chłodnia",
+      "typ": "Zestaw · Thermo King",
+      "rok": 2019,
+      "przebieg": "705 200 km",
+      "moc": "483 KM",
+      "cena": "268 000 PLN",
+      "status": "Nowość",
+      "kategoria": "zestaw"
+    }
+  ]
+}
