@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Serwis Sobowiec – naprawa laptopów, telefonów i RTV | Gorzyce (Przybyłów)</title>
+<meta name="description" content="Serwis elektroniki w Gorzycach: naprawa laptopów, telefonów i sprzętu RTV. Wycena przed naprawą, bez ukrytych kosztów. Zadzwoń: 505 206 104.">
+<meta name="theme-color" content="#6d28d9">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- model-viewer: renderuje model 3D (.glb) — auto-obrót + kręcenie myszką -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ===== Ikony (sprite) ===== -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-laptop" viewBox="0 0 24 24"><path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z"/><path d="M20.054 15.987H3.946"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-tv" viewBox="0 0 24 24"><path d="m17 2-5 5-5-5"/><rect width="20" height="15" x="2" y="7" rx="2"/></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-badge-check" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><path d="M12 20v2"/><path d="M12 2v2"/><path d="M17 20v2"/><path d="M17 2v2"/><path d="M2 12h2"/><path d="M2 17h2"/><path d="M2 7h2"/><path d="M20 12h2"/><path d="M20 17h2"/><path d="M20 7h2"/><path d="M7 20v2"/><path d="M7 2v2"/><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8" rx="1"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-navigation" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol>
+  <symbol id="i-user-round" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+  <symbol id="i-monitor-smartphone" viewBox="0 0 24 24"><path d="M18 8V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h8"/><path d="M10 19v-3.96 3.15"/><path d="M7 19h5"/><rect width="6" height="10" x="16" y="12" rx="2"/></symbol>
+  <symbol id="i-hard-drive" viewBox="0 0 24 24"><path d="M10 16h.01"/><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><path d="M21.946 12.013H2.054"/><path d="M6 16h.01"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+</svg>
+
+<!-- ===== Nagłówek ===== -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark"><svg class="icon"><use href="#i-wrench"/></svg></span>
+      <span class="brand-text">
+        <span class="brand-name">Serwis Sobowiec</span>
+        <span class="brand-tag">Laptopy · Telefony · RTV</span>
+      </span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Główna nawigacja">
+      <a href="#uslugi">Usługi</a>
+      <a href="#o-nas">O nas</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+
+    <div class="header-actions">
+      <a class="btn btn-primary btn-sm hide-mobile" href="tel:+48505206104">
+        <svg class="icon"><use href="#i-phone"/></svg> 505 206 104
+      </a>
+      <a class="btn btn-icon btn-outline show-mobile" href="tel:+48505206104" aria-label="Zadzwoń: 505 206 104">
+        <svg class="icon"><use href="#i-phone"/></svg>
+      </a>
+      <button class="btn btn-icon btn-ghost nav-toggle" id="menuOpen" aria-label="Otwórz menu" aria-expanded="false" aria-controls="mobileMenu">
+        <svg class="icon"><use href="#i-menu"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Menu mobilne ===== -->
+<div class="menu-backdrop" id="menuBackdrop" hidden></div>
+<aside class="mobile-menu" id="mobileMenu" hidden aria-label="Menu mobilne">
+  <div class="mobile-menu-head">
+    <span class="brand-name">Serwis Sobowiec</span>
+    <button class="btn btn-icon btn-ghost" id="menuClose" aria-label="Zamknij menu">
+      <svg class="icon"><use href="#i-x"/></svg>
+    </button>
+  </div>
+  <nav class="mobile-nav">
+    <a href="#uslugi">Usługi</a>
+    <a href="#o-nas">O nas</a>
+    <a href="#kontakt">Kontakt</a>
+    <a class="btn btn-primary btn-block" href="tel:+48505206104">
+      <svg class="icon"><use href="#i-phone"/></svg> Zadzwoń: 505 206 104
+    </a>
+    <div class="mobile-status"><span class="status-badge" data-status-badge>Godziny otwarcia poniżej</span></div>
+  </nav>
+</aside>
+
+<main id="main">
+
+  <!-- ===== Hero ===== -->
+  <section class="hero hero-surface" id="top">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="pill reveal">
+          <svg class="icon accent"><use href="#i-map-pin"/></svg> Gorzyce · Przybyłów i okolice
+        </p>
+
+        <h1 class="reveal">
+          Naprawa laptopów, telefonów i&nbsp;<span class="accent">RTV</span>
+          <span class="h1-sub">Szybko, uczciwie, bez&nbsp;niespodzianek.</span>
+        </h1>
+
+        <p class="lead reveal">
+          Jasna wycena przed naprawą, bez ukrytych kosztów.
+          Przynieś sprzęt albo zadzwoń — powiemy, co się dzieje i&nbsp;ile potrwa naprawa.
+        </p>
+
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary btn-lg" href="tel:+48505206104">
+            <svg class="icon"><use href="#i-phone"/></svg> Zadzwoń: 505 206 104
+          </a>
+          <a class="btn btn-outline btn-lg" href="#uslugi">Zobacz usługi</a>
+        </div>
+
+        <div class="reveal"><span class="status-badge" data-status-badge>Godziny otwarcia poniżej</span></div>
+
+        <ul class="trust reveal">
+          <li><svg class="icon accent"><use href="#i-wrench"/></svg> Wycena przed naprawą</li>
+          <li><svg class="icon accent"><use href="#i-shield-check"/></svg> Bez ukrytych kosztów</li>
+          <li><svg class="icon accent"><use href="#i-badge-check"/></svg> Naprawa często od ręki</li>
+        </ul>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="hero-media">
+          <div class="media-glow" aria-hidden="true"></div>
+          <model-viewer
+            class="hero-model"
+            src="iphone_14_pro.glb"
+            alt="Telefon iPhone 14 Pro — interaktywny model 3D. Przeciągnij, aby obrócić."
+            auto-rotate
+            auto-rotate-delay="0"
+            rotation-per-second="22deg"
+            camera-controls
+            disable-zoom
+            interaction-prompt="none"
+            environment-image="neutral"
+            exposure="1.05"
+            shadow-intensity="1"
+            shadow-softness="0.75"
+            camera-orbit="0deg 80deg 105%"
+            touch-action="pan-y"
+            loading="eager"
+          ></model-viewer>
+        </div>
+
+        <div class="device-chips">
+          <span class="pill pill-sm"><svg class="icon accent"><use href="#i-laptop"/></svg> Laptopy</span>
+          <span class="pill pill-sm"><svg class="icon accent"><use href="#i-smartphone"/></svg> Telefony</span>
+          <span class="pill pill-sm"><svg class="icon accent"><use href="#i-tv"/></svg> RTV / TV</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Usługi ===== -->
+  <section class="section wash" id="uslugi">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="dot"></span> Usługi</p>
+        <h2>Naprawiamy sprzęt, z którego korzystasz na co dzień</h2>
+        <p class="section-desc">
+          Trzy główne obszary, jedno miejsce. Zawsze najpierw wycena —
+          naprawę zaczynamy dopiero po Twojej zgodzie.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        <article class="card service reveal">
+          <span class="card-icon"><svg class="icon"><use href="#i-laptop"/></svg></span>
+          <h3>Laptopy i komputery</h3>
+          <p>Nie włącza się, zwalnia, przegrzewa albo padł dysk? Sprawdzimy i naprawimy.</p>
+          <ul class="checks">
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Wymiana matrycy i zawiasów</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Czyszczenie i wymiana pasty</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Dyski SSD, pamięć RAM, upgrade</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Instalacja systemu i sterowników</li>
+          </ul>
+        </article>
+
+        <article class="card service reveal">
+          <span class="card-icon"><svg class="icon"><use href="#i-smartphone"/></svg></span>
+          <h3>Telefony i tablety</h3>
+          <p>Pęknięta szybka, słaba bateria albo problem z ładowaniem — naprawiamy sprawnie.</p>
+          <ul class="checks">
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Wymiana wyświetlacza i szybki</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Wymiana baterii</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Naprawa złącza ładowania</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Sprzęt po zalaniu</li>
+          </ul>
+        </article>
+
+        <article class="card service reveal">
+          <span class="card-icon"><svg class="icon"><use href="#i-tv"/></svg></span>
+          <h3>RTV i telewizory</h3>
+          <p>Brak obrazu, ciemny ekran, przepalona płyta? Zajmiemy się elektroniką RTV.</p>
+          <ul class="checks">
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Telewizory LED / LCD</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Podświetlenie i matryce</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Płyty główne i zasilacze</li>
+            <li><svg class="icon accent"><use href="#i-check"/></svg> Sprzęt audio i nagłośnienie</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="grid-extra reveal">
+        <div class="card">
+          <p class="label">Robimy też</p>
+          <ul class="extras">
+            <li><svg class="icon accent"><use href="#i-cpu"/></svg> Konsole i drobna elektronika</li>
+            <li><svg class="icon accent"><use href="#i-database"/></svg> Odzysk i kopie danych</li>
+            <li><svg class="icon accent"><use href="#i-wrench"/></svg> Wymiana podzespołów</li>
+          </ul>
+        </div>
+        <div class="card card-accent">
+          <div>
+            <h3>Nie widzisz swojego sprzętu?</h3>
+            <p>Zadzwoń i opisz problem — sprawdzimy, czy damy radę pomóc.</p>
+          </div>
+          <a class="btn btn-primary btn-block" href="tel:+48505206104">
+            <svg class="icon"><use href="#i-phone"/></svg> 505 206 104
+          </a>
+        </div>
+      </div>
+
+      <div class="brands reveal">
+        <p class="brands-title">Serwisujemy sprzęt większości producentów:</p>
+        <div class="brands-row">
+          <button class="brand-arrow" type="button" data-brands-prev aria-label="Przewiń marki w lewo">
+            <svg class="icon"><use href="#i-chevron-left"/></svg>
+          </button>
+
+          <div class="marquee" id="brandsScroller" tabindex="0" role="group" aria-label="Obsługiwane marki sprzętu">
+            <div class="marquee-track">
+              <span class="brand-chip">Dell</span><span class="brand-chip">HP</span><span class="brand-chip">Lenovo</span>
+              <span class="brand-chip">Asus</span><span class="brand-chip">Acer</span><span class="brand-chip">Apple</span>
+              <span class="brand-chip">Samsung</span><span class="brand-chip">Xiaomi</span><span class="brand-chip">LG</span>
+              <span class="brand-chip">Sony</span><span class="brand-chip">Philips</span><span class="brand-chip">Toshiba</span>
+            </div>
+          </div>
+
+          <button class="brand-arrow" type="button" data-brands-next aria-label="Przewiń marki w prawo">
+            <svg class="icon"><use href="#i-chevron-right"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Laptop ===== -->
+  <section class="section hero-surface" id="laptopy">
+    <div class="wrap split split-center">
+      <div class="reveal split-visual">
+        <div class="media-glow" aria-hidden="true"></div>
+        <model-viewer
+          class="hero-model"
+          src="laptop.glb"
+          alt="Laptop — interaktywny model 3D. Przeciągnij, aby obrócić."
+          auto-rotate
+          auto-rotate-delay="0"
+          rotation-per-second="18deg"
+          camera-controls
+          disable-zoom
+          interaction-prompt="none"
+          environment-image="neutral"
+          exposure="1.05"
+          shadow-intensity="1"
+          shadow-softness="0.75"
+          camera-orbit="0deg 78deg 105%"
+          touch-action="pan-y"
+          loading="eager"
+        ></model-viewer>
+      </div>
+
+      <div class="reveal">
+        <p class="eyebrow"><span class="dot"></span> Laptopy i komputery</p>
+        <h2>Twój laptop zasługuje na drugie życie</h2>
+        <p class="section-desc left">
+          Zamiast kupować nowy sprzęt, często wystarczy naprawa albo prosta modernizacja.
+          Sprawdzimy usterkę, powiemy wprost, czy warto — i ile to kosztuje, zanim
+          cokolwiek zaczniemy.
+        </p>
+        <ul class="points">
+          <li><span class="chip-icon"><svg class="icon"><use href="#i-wrench"/></svg></span> Nie włącza się, gaśnie albo się zawiesza</li>
+          <li><span class="chip-icon"><svg class="icon"><use href="#i-cpu"/></svg></span> Zwalnia i przegrzewa się — czyszczenie i pasta</li>
+          <li><span class="chip-icon"><svg class="icon"><use href="#i-hard-drive"/></svg></span> Szybszy dysk SSD i więcej pamięci RAM</li>
+          <li><span class="chip-icon"><svg class="icon"><use href="#i-monitor-smartphone"/></svg></span> Wymiana matrycy, zawiasów i klawiatury</li>
+        </ul>
+        <a class="btn btn-primary btn-lg mt-lg" href="tel:+48505206104">
+          <svg class="icon"><use href="#i-phone"/></svg> Zadzwoń: 505 206 104
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== O nas ===== -->
+  <section class="section" id="o-nas">
+    <div class="wrap split split-center">
+      <div class="reveal">
+        <p class="eyebrow"><span class="dot"></span> O nas</p>
+        <h2>Jeden zaufany fachowiec od&nbsp;Twojego sprzętu</h2>
+        <div class="prose">
+          <p>
+            Serwis Sobowiec prowadzi <strong>Tomasz Sobowiec</strong> — to on osobiście
+            zajmuje się każdą naprawą, od przyjęcia sprzętu po odbiór. Bez oddawania sprzętu
+            „gdzieś dalej" i bez czekania w&nbsp;kolejce po odpowiedź.
+          </p>
+          <p>
+            Stawiamy na prostą zasadę: najpierw sprawdzamy, co się zepsuło, mówimy wprost
+            ile to kosztuje, a&nbsp;naprawę zaczynamy dopiero po Twojej zgodzie. Tak, żebyś
+            zawsze wiedział, za co płacisz.
+          </p>
+        </div>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="tel:+48505206104">
+            <svg class="icon"><use href="#i-phone"/></svg> Zadzwoń: 505 206 104
+          </a>
+          <a class="btn btn-outline" href="#kontakt">Jak dojechać</a>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="card owner">
+          <div class="owner-head">
+            <span class="owner-avatar"><svg class="icon"><use href="#i-user-round"/></svg></span>
+            <div>
+              <p class="owner-name">Tomasz Sobowiec</p>
+              <p class="muted-sm">Właściciel serwisu</p>
+            </div>
+          </div>
+          <p class="label mt-lg">Zajmujemy się</p>
+          <ul class="extras">
+            <li><svg class="icon accent"><use href="#i-laptop"/></svg> Laptopy i komputery</li>
+            <li><svg class="icon accent"><use href="#i-smartphone"/></svg> Telefony i tablety</li>
+            <li><svg class="icon accent"><use href="#i-tv"/></svg> RTV, TV i audio</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Kontakt ===== -->
+  <section class="section" id="kontakt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow"><span class="dot"></span> Kontakt i dojazd</p>
+        <h2>Zadzwoń albo podjedź ze sprzętem</h2>
+        <p class="section-desc">
+          Najszybciej załatwisz sprawę telefonicznie. Jesteś w okolicy? Po prostu wpadnij.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-col">
+          <div class="card reveal">
+            <p class="label"><svg class="icon accent"><use href="#i-phone"/></svg> Telefon</p>
+            <a class="big-phone" href="tel:+48505206104">505 206 104</a>
+            <p class="muted-sm">Kliknij, aby zadzwonić z telefonu</p>
+            <address class="addr">
+              <svg class="icon accent"><use href="#i-map-pin"/></svg>
+              <span>Serwis Sobowiec<br>ul. Bolesława Leśmiana 9<br>Przybyłów · 39-432 Gorzyce</span>
+            </address>
+            <a class="btn btn-outline btn-block" target="_blank" rel="noopener noreferrer"
+               href="https://www.google.com/maps/dir/?api=1&destination=ul.%20Boles%C5%82awa%20Le%C5%9Bmiana%209%2C%2039-432%20Gorzyce">
+              <svg class="icon accent"><use href="#i-navigation"/></svg> Wyznacz trasę
+            </a>
+          </div>
+
+          <div class="card reveal">
+            <div class="hours-head">
+              <p class="label"><svg class="icon accent"><use href="#i-clock"/></svg> Godziny otwarcia</p>
+              <span class="status-badge" data-status-badge>Godziny otwarcia poniżej</span>
+            </div>
+            <ul class="hours" id="hoursTable">
+              <li data-day="1"><span class="day">Poniedziałek</span><span class="time">09:00 – 17:00</span></li>
+              <li data-day="2"><span class="day">Wtorek</span><span class="time">09:00 – 17:00</span></li>
+              <li data-day="3"><span class="day">Środa</span><span class="time">09:00 – 17:00</span></li>
+              <li data-day="4"><span class="day">Czwartek</span><span class="time">09:00 – 17:00</span></li>
+              <li data-day="5"><span class="day">Piątek</span><span class="time">09:00 – 17:00</span></li>
+              <li data-day="6"><span class="day">Sobota</span><span class="time">09:00 – 13:00</span></li>
+              <li data-day="0"><span class="day">Niedziela</span><span class="time closed">Zamknięte</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="reveal map-col">
+          <div class="card map-card">
+            <!-- Mapa Google ładuje się dopiero po zgodzie (cookies Google) -->
+            <div class="map-holder" id="mapHolder"
+                 data-map-src="https://www.google.com/maps?q=ul.%20Boles%C5%82awa%20Le%C5%9Bmiana%209%2C%2039-432%20Gorzyce&output=embed"
+                 data-map-title="Mapa dojazdu — Serwis Sobowiec, ul. Bolesława Leśmiana 9, 39-432 Gorzyce">
+              <div class="map-consent">
+                <strong>Mapa Google jest zablokowana</strong>
+                <span>
+                  Wyświetlenie mapy wymaga zgody na pliki cookies Google. Możesz też
+                  od razu wyznaczyć trasę — bez włączania mapy.
+                </span>
+                <button class="btn btn-primary btn-sm" type="button" id="mapLoad">Pokaż mapę</button>
+              </div>
+            </div>
+            <p class="map-note">
+              ul. Bolesława Leśmiana 9, Przybyłów — Gorzyce. Parking dla klientów bezpośrednio przy serwisie.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== Stopka ===== -->
+<footer class="site-footer">
+  <div class="footer-cta">
+    <div class="wrap footer-cta-inner">
+      <div>
+        <h2>Zepsuty sprzęt? Sprawdzimy, co mu&nbsp;jest.</h2>
+        <p>Zadzwoń i&nbsp;opisz problem — powiemy, co dalej. Bez zobowiązań.</p>
+      </div>
+      <a class="btn btn-white btn-lg" href="tel:+48505206104">
+        <svg class="icon"><use href="#i-phone"/></svg> Zadzwoń: 505 206 104
+      </a>
+    </div>
+  </div>
+
+  <div class="wrap footer-main">
+    <div class="footer-cols">
+      <div>
+        <p class="footer-brand">
+          <span class="footer-mark"><svg class="icon"><use href="#i-wrench"/></svg></span>
+          <span class="brand-name">Serwis Sobowiec</span>
+        </p>
+        <p class="footer-about">
+          Laptopy · Telefony · RTV. Naprawa elektroniki w&nbsp;Gorzycach — laptopy,
+          telefony i&nbsp;sprzęt RTV.
+        </p>
+        <a class="social" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook — otworzy się w nowej karcie">
+          <svg class="icon"><use href="#i-facebook"/></svg>
+        </a>
+      </div>
+
+      <nav aria-label="Nawigacja w stopce">
+        <p class="footer-title">Na skróty</p>
+        <ul class="footer-list">
+          <li><a href="#uslugi">Usługi</a></li>
+          <li><a href="#o-nas">O nas</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <p class="footer-title">Usługi</p>
+        <ul class="footer-list plain">
+          <li>Naprawa laptopów</li>
+          <li>Naprawa telefonów</li>
+          <li>Serwis RTV / TV</li>
+          <li>Wymiana podzespołów</li>
+          <li>Odzysk danych</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-title">Kontakt</p>
+        <ul class="footer-list plain">
+          <li>
+            <a class="footer-phone" href="tel:+48505206104">
+              <svg class="icon violet"><use href="#i-phone"/></svg> 505 206 104
+            </a>
+          </li>
+          <li class="footer-addr">
+            <svg class="icon violet"><use href="#i-map-pin"/></svg>
+            <span>ul. Bolesława Leśmiana 9<br>Przybyłów · 39-432 Gorzyce</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="year">2026</span> Serwis Sobowiec. Wszystkie prawa zastrzeżone.</p>
+      <p class="footer-legal">
+        <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+        <span aria-hidden="true">·</span>
+        <button class="link-btn" type="button" id="cookieSettings">Ustawienia cookies</button>
+      </p>
+    </div>
+
+    <!-- Atrybucja wymagana przez licencję CC BY 4.0 (autor + tytuł + źródło + licencja) -->
+    <p class="footer-credits">
+      Modele 3D:
+      <a href="https://sketchfab.com/3d-models/iphone-14-pro-5cb0778041a34f09b409a38c687bb1d4" target="_blank" rel="noopener noreferrer">„Iphone 14 Pro"</a>
+      — mister dude,
+      <a href="https://sketchfab.com/3d-models/laptop-7d870e900889481395b4a575b9fa8c3e" target="_blank" rel="noopener noreferrer">„Laptop"</a>
+      — Aullwen (Sketchfab), licencja
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>
+    </p>
+  </div>
+</footer>
+
+<!-- ===== Pływający przycisk „Zadzwoń" (mobile) ===== -->
+<a class="call-fab" id="callFab" href="tel:+48505206104" aria-label="Zadzwoń teraz: 505 206 104">
+  <svg class="icon"><use href="#i-phone"/></svg>
+</a>
+
+<!-- ===== Zgoda na cookies — wymaga aktywnego wyboru (blokuje stronę) ===== -->
+<div class="cookie-overlay" id="cookieBar" hidden role="dialog" aria-modal="true"
+     aria-labelledby="cookieTitle" aria-describedby="cookieDesc">
+  <div class="cookie-modal">
+    <span class="cookie-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+        <path d="m9 12 2 2 4-4"/>
+      </svg>
+    </span>
+    <strong class="cookie-title" id="cookieTitle">Zanim przejdziesz dalej</strong>
+    <p class="cookie-desc" id="cookieDesc">
+      Używamy <strong>niezbędnych</strong> plików cookies — potrzebnych do działania
+      strony i zapamiętania Twojego wyboru. Dodatkowe wczytamy dopiero za Twoją zgodą
+      i służą wyłącznie do wyświetlenia <strong>mapy Google</strong>.
+      Nie stosujemy analityki ani reklam.
+    </p>
+    <div class="cookie-actions">
+      <button class="btn btn-outline" type="button" id="cookieReject">Tylko niezbędne</button>
+      <button class="btn btn-primary" type="button" id="cookieAccept">Akceptuję wszystkie</button>
+    </div>
+    <a class="cookie-link" href="polityka-prywatnosci.html">Przeczytaj politykę prywatności</a>
+  </div>
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Serwis Sobowiec",
+  "description": "Serwis elektroniki — naprawa laptopów, telefonów i sprzętu RTV w Gorzycach.",
+  "telephone": "+48 505 206 104",
+  "founder": "Tomasz Sobowiec",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ul. Bolesława Leśmiana 9",
+    "addressLocality": "Gorzyce",
+    "postalCode": "39-432",
+    "addressRegion": "podkarpackie",
+    "addressCountry": "PL"
+  },
+  "areaServed": ["Gorzyce", "Przybyłów", "Trześń", "Sokolniki", "Wrzawy"],
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "17:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "13:00" }
+  ],
+  "priceRange": "$$"
+}
+</script>
+
+<script src="script.js" defer></script>
+</body>
+</html>
