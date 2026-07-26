@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elegancki Facet Classic Barbershop — Stalowa Wola | Sławomir Rurak</title>
+<meta name="description" content="Elegancki Facet Classic Barbershop w Stalowej Woli. Strzyżenie, broda, golenie na mokro. Barbering jako rytuał — Sławomir Rurak. Ocena 5.0 ★ w Google. Umów wizytę online.">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="canonical" href="https://eleganckifacet.pl/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Elegancki Facet Classic Barbershop — Stalowa Wola">
+<meta property="og:description" content="Miejsce dla mężczyzn, którzy w kwestii swojego wyglądu nie idą na kompromisy. Barbershop w Stalowej Woli.">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:image" content="img/hero.jpg">
+
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap">
+<!-- ?v= przy plikach: po zmianie CSS/JS podbij numer, żeby przeglądarki nie trzymały starej wersji -->
+<link rel="stylesheet" href="css/style.css?v=28">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HairSalon",
+  "name": "Elegancki Facet Classic Barbershop",
+  "image": "https://eleganckifacet.pl/img/hero.jpg",
+  "logo": "https://eleganckifacet.pl/img/logo.jpg",
+  "founder": "Sławomir Rurak",
+  "telephone": "+48781071789",
+  "email": "slawomir.rurak@onet.pl",
+  "priceRange": "20–170 zł",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ul. Komisji Edukacji Narodowej 13/4",
+    "addressLocality": "Stalowa Wola",
+    "postalCode": "37-450",
+    "addressCountry": "PL"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "53"
+  },
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "19:00" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "09:00", "closes": "15:00" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#hero">Przejdź do treści</a>
+
+<!-- złota poświata podążająca za kursorem (tylko myszka, wyłączona przy zredukowanym ruchu) -->
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+
+<!-- ============ NAWIGACJA ============ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <div class="nav__left">
+      <a class="brand" href="#hero" aria-label="Elegancki Facet Classic Barbershop — strona główna">
+      <span class="brand__text">
+        <strong>Elegancki Facet</strong>
+        <em>Classic Barbershop</em>
+      </span>
+      </a>
+
+      <a class="nav__phone" href="tel:+48781071789" aria-label="Zadzwoń: 781 071 789">
+        <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>
+        <span class="nav__phone-num">781 071 789</span>
+      </a>
+    </div>
+
+    <nav class="nav__links" id="menu" aria-label="Nawigacja główna">
+      <a href="witajcie.html">Witajcie</a>
+      <a href="#o-nas">O nas</a>
+      <a href="#uslugi">Usługi</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#opinie">Opinie</a>
+      <a href="#kontakt">Kontakt</a>
+      <a class="btn btn--gold nav__cta" data-booking href="https://booksy.com/pl-pl/218504_elegancki-facet-classic-barbershop_barber-shop_11115_stalowa-wola" target="_blank" rel="noopener">Umów wizytę</a>
+    </nav>
+
+    <button class="burger" id="burger" aria-label="Otwórz menu" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="hero__bg" aria-hidden="true">
+    <img src="img/hero.jpg" alt="" class="hero__img" id="heroImg" width="640" height="640" fetchpriority="high">
+    <div class="hero__veil"></div>
+    <div class="hero__grain"></div>
+  </div>
+
+  <div class="hero__content">
+    <p class="hero__eyebrow hero-in">Est. Stalowa Wola</p>
+
+    <h1 class="hero__title" id="heroTitle" aria-label="Elegancki Facet">
+      <span class="hero__line" data-text="ELEGANCKI"></span>
+      <span class="hero__line hero__line--accent" data-text="FACET"></span>
+    </h1>
+
+    <div class="hero__rule hero-in" aria-hidden="true"></div>
+    <p class="hero__sub hero-in">Classic Barbershop — Stalowa Wola</p>
+    <p class="hero__claim hero-in">Dla mężczyzn, którzy w kwestii swojego wyglądu i potrzeb nie idą na kompromisy.</p>
+
+    <div class="hero__actions hero-in">
+      <a class="btn btn--gold btn--lg" data-booking href="https://booksy.com/pl-pl/218504_elegancki-facet-classic-barbershop_barber-shop_11115_stalowa-wola" target="_blank" rel="noopener">Umów wizytę</a>
+      <a class="btn btn--ghost btn--lg" href="#uslugi">Zobacz cennik</a>
+    </div>
+
+    <p class="hero__rating hero-in">
+      <span class="stars" aria-hidden="true">★★★★★</span>
+      <span>5.0 w Google · 53 opinie</span>
+    </p>
+  </div>
+
+  <a class="scroll-cue hero-in" href="#o-nas" aria-label="Przewiń do sekcji O nas">
+    <span class="scroll-cue__line" aria-hidden="true"></span>
+    <span class="scroll-cue__txt">scroll</span>
+  </a>
+
+</section>
+
+<!-- ============ O NAS ============ -->
+<section class="section section--alt" id="o-nas">
+  <div class="wrap grid-2">
+    <div class="about__media reveal">
+      <img src="img/barber.jpg" alt="Sławomir Rurak przed salonem Elegancki Facet Classic Barbershop w Stalowej Woli" loading="lazy" width="640" height="640">
+    </div>
+
+    <div class="about__text">
+      <p class="eyebrow reveal">O nas</p>
+      <h2 class="reveal">Witaj!</h2>
+      <p class="lead reveal">
+        Nazywam się <strong>Sławomir Rurak</strong> i jestem właścicielem salonu
+        Elegancki Facet Classic Barbershop w Stalowej Woli.
+      </p>
+      <p class="reveal">
+        Jakiś czas temu podjąłem decyzję, że powinienem zacząć coś zmieniać w swoim życiu
+        i spełnić jedno ze swoich marzeń. Od dawna nosiłem się z zamiarem stworzenia salonu,
+        w którym każdy facet — ten młodszy i ten starszy — znajdzie coś dla siebie i poczuje,
+        że to miejsce właśnie dla niego.
+      </p>
+      <p class="reveal">
+        Chciałem stworzyć miejsce, z jakiego sam chciałbym korzystać. Czyste, przestronne, jasne
+        i z klasą, ale nie zmanierowane — takie dla starszych i dla młodych.
+      </p>
+      <p class="reveal">
+        Od początku swojej zawodowej kariery stawiam na profesjonalizm. Indywidualnie podchodzę
+        do moich Klientów i dokładam wszelkich starań, aby każdy czuł się w moim salonie wyjątkowo.
+        By każdy wychodził zadbany i szczęśliwy. A wszystkie pozytywne opinie dodają mi skrzydeł
+        i utwierdzają w przekonaniu, że obrałem właściwy kierunek.
+      </p>
+      <p class="reveal">
+        <strong>Barber to brzmi godnie.</strong> Mam nadzieję, że Stalowa Wola zdobędzie kolejne
+        miejsce na swojej mapie, do którego Klienci będą wracać z zadowoleniem.
+      </p>
+
+      <p class="signature reveal">Sławomir Rurak<span>właściciel</span></p>
+
+      <p class="about__links reveal">
+        <a class="link-gold" data-booking href="https://booksy.com/pl-pl/218504_elegancki-facet-classic-barbershop_barber-shop_11115_stalowa-wola" target="_blank" rel="noopener">Zarezerwuj termin →</a>
+        <a class="link-gold" href="witajcie.html">Poznaj naszą filozofię →</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ USŁUGI ============ -->
+<section class="section" id="uslugi">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="eyebrow reveal">Usługi</p>
+      <h2 class="reveal">Cennik</h2>
+      <p class="section__desc reveal">Ceny obowiązują od poniedziałku do soboty. Płatność gotówką lub kartą.</p>
+    </header>
+
+    <div class="price-cols">
+      <div class="price-col reveal">
+        <h3 class="price-col__title reveal">Strzyżenie i broda</h3>
+        <ul class="price-list">
+          <li class="price reveal">
+            <span class="price__name">Strzyżenie włosów</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">80 zł</span>
+          </li>
+          <li class="price price--featured reveal">
+            <span class="price__name">COMBO — strzyżenie + broda <em class="tag">najczęściej wybierane</em></span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">130 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Strzyżenie brody</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">70 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Strzyżenie dzieci 7–11 lat</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">70 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Depilacja woskiem — uszy / nos</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">20 zł</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="price-col reveal">
+        <h3 class="price-col__title reveal">Golenie i pielęgnacja</h3>
+        <ul class="price-list">
+          <li class="price reveal">
+            <span class="price__name">Golenie na mokro — parownica, gorący ręcznik</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">90 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Combo z goleniem na mokro</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">150 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Odsiwianie brody</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">80 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Odsiwianie włosów</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">110 zł</span>
+          </li>
+          <li class="price reveal">
+            <span class="price__name">Odsiwianie combo</span>
+            <span class="price__dots" aria-hidden="true"></span>
+            <span class="price__val">170 zł</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section__cta reveal">
+      <a class="btn btn--gold btn--lg" data-booking href="https://booksy.com/pl-pl/218504_elegancki-facet-classic-barbershop_barber-shop_11115_stalowa-wola" target="_blank" rel="noopener">Umów wizytę w Booksy</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALERIA ============ -->
+<section class="section section--alt" id="galeria">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="eyebrow reveal">Galeria</p>
+      <h2 class="reveal">Efekty pracy</h2>
+      <p class="section__desc reveal">Salon, atmosfera i efekty pracy. Kliknij, aby powiększyć.</p>
+    </header>
+
+    <div class="gallery" id="gallery">
+      <button class="gallery__item reveal" type="button" aria-label="Powiększ zdjęcie 1">
+        <img src="img/galeria-1.jpg" alt="Męskie strzyżenie z wyraźnym przejściem i wykończona, konturowana broda" loading="lazy" width="640" height="693">
+      </button>
+      <button class="gallery__item reveal" type="button" aria-label="Powiększ zdjęcie 2">
+        <img src="img/galeria-2.jpg" alt="Wnętrze salonu — klasyczny fotel barberski i logo Elegancki Facet na ścianie" loading="lazy" width="640" height="640">
+      </button>
+      <button class="gallery__item reveal" type="button" aria-label="Powiększ zdjęcie 3">
+        <img src="img/galeria-3.jpg" alt="Witryna barbershopu przy ul. Komisji Edukacji Narodowej w Stalowej Woli" loading="lazy" width="640" height="640">
+      </button>
+      <button class="gallery__item reveal" type="button" aria-label="Powiększ zdjęcie 4">
+        <img src="img/galeria-4.jpg" alt="Zabieg z parownicą — przygotowanie zarostu do golenia" loading="lazy" width="640" height="640">
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPINIE ============ -->
+<section class="section section--opinions" id="opinie">
+  <div class="wrap">
+    <header class="section__head section__head--center">
+      <p class="eyebrow reveal">Opinie</p>
+      <h2 class="reveal">Co mówią klienci</h2>
+
+      <div class="review-card reveal" role="img" aria-label="Ocena 5,0 na 5 na podstawie 53 opinii w Google.">
+        <div class="review-card__stars" aria-hidden="true">
+          <span class="review-card__star" style="--i:0"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+          <span class="review-card__star" style="--i:1"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+          <span class="review-card__star" style="--i:2"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+          <span class="review-card__star" style="--i:3"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+          <span class="review-card__star" style="--i:4"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></span>
+        </div>
+
+        <p class="review-card__score" aria-hidden="true">
+          <span data-count-to="5" data-count-decimals="1">5,0</span><span class="review-card__count"> (<span data-count-to="53">53</span> opinie)</span>
+        </p>
+
+        <p class="review-card__meta" aria-hidden="true">Ocena wyjątkowa — wszystkie opinie w Google na 5 gwiazdek.</p>
+      </div>
+    </header>
+
+    <div class="quote-panel reveal">
+      <div class="slider" id="slider">
+      <div class="slider__viewport">
+        <ul class="slider__track" id="track">
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Elegancki wystrój, bardzo miły klimat i pełen profesjonalizm. Fachowa usługa na najwyższym poziomie, ciekawe rozmowy i świetna atmosfera.</blockquote>
+            <p class="quote__who"><strong>Mariusz Baran</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Bardzo profesjonalne strzyżenie, dopieszczone w najmniejszych szczegółach. Jeszcze nigdy moja fryzura i broda nie wyglądały tak dobrze.</blockquote>
+            <p class="quote__who"><strong>Andrzej Dulda</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Elegancja, styl i pełna precyzja w każdym szczególe. Widać, że to facet, który zna się na swoim fachu i robi swoją robotę z pasją.</blockquote>
+            <p class="quote__who"><strong>Sławomir Dzięgiel</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Właściciel to prawdziwy barber z zamiłowaniem. Indywidualnie podchodzi do klienta, doradzi, wyjaśni i co najważniejsze brak pośpiechu, a przy tym perfekcja.</blockquote>
+            <p class="quote__who"><strong>Łukasz Blicharz</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Rewelacyjny barbershop. Fryzura i broda 10/10. Facet wie co robi!</blockquote>
+            <p class="quote__who"><strong>Tadeusz Majkowski</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+          <li class="quote">
+            <p class="quote__mark" aria-hidden="true">“</p>
+            <blockquote>Fryzura wygląda dokładnie tak jak chciałem. Widać, że osoba zna się na swoim fachu i podchodzi do klienta z pasją.</blockquote>
+            <p class="quote__who"><strong>Kacper</strong><span class="stars" aria-label="Ocena 5 na 5">★★★★★</span></p>
+          </li>
+        </ul>
+      </div>
+
+        <div class="slider__nav">
+          <button class="slider__arrow" id="prev" type="button" aria-label="Poprzednia opinia">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 4 7 12l8 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <div class="slider__dots" id="dots" role="tablist" aria-label="Wybór opinii"></div>
+          <button class="slider__arrow" id="next" type="button" aria-label="Następna opinia">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m9 4 8 8-8 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p class="opinions__more reveal">
+      <a class="link-gold" href="https://www.google.com/maps/search/?api=1&amp;query=Elegancki+Facet+Classic+Barbershop+Stalowa+Wola" target="_blank" rel="noopener">Zobacz wszystkie opinie w Google →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ KONTAKT ============ -->
+<section class="section section--alt" id="kontakt">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="eyebrow reveal">Kontakt</p>
+      <h2 class="reveal">Zapraszamy do Stalowej Woli</h2>
+    </header>
+
+    <div class="contact">
+      <div class="contact__info reveal">
+        <h3 class="h-sm">Adres</h3>
+        <address>
+          Elegancki Facet Classic Barbershop<br>
+          ul. Komisji Edukacji Narodowej 13/4<br>
+          37-450 Stalowa Wola
+        </address>
+
+        <h3 class="h-sm">Kontakt</h3>
+        <p>
+          <a href="tel:+48781071789" class="link-gold">781 071 789</a><br>
+          <a href="mailto:slawomir.rurak@onet.pl" class="link-gold">slawomir.rurak@onet.pl</a>
+        </p>
+
+        <a class="btn btn--gold btn--lg contact__cta" data-booking href="https://booksy.com/pl-pl/218504_elegancki-facet-classic-barbershop_barber-shop_11115_stalowa-wola" target="_blank" rel="noopener">Umów wizytę</a>
+      </div>
+
+      <div class="contact__hours reveal">
+        <h3 class="h-sm">Godziny otwarcia</h3>
+        <div class="hours-card reveal">
+          <p class="hours-card__status" id="openStatus" hidden>
+            <span class="hours-card__dot" aria-hidden="true"></span>
+            <span class="hours-card__state" id="openState"></span>
+            <span class="hours-card__until" id="openUntil"></span>
+          </p>
+
+          <table class="hours">
+            <tbody>
+              <tr data-days="1,2,3,4,5"><th scope="row">Poniedziałek – Piątek</th><td>9:00 – 19:00</td></tr>
+              <tr data-days="6"><th scope="row">Sobota</th><td>9:00 – 15:00</td></tr>
+              <tr data-days="0" class="hours--off"><th scope="row">Niedziela</th><td>zamknięte</td></tr>
+            </tbody>
+          </table>
+
+          <p class="hours-card__note">Rezerwacja w Booksy działa całą dobę — także po godzinach.</p>
+        </div>
+      </div>
+
+      <div class="contact__map reveal">
+        <iframe
+          title="Mapa — ul. Komisji Edukacji Narodowej 13/4, Stalowa Wola"
+          src="https://www.google.com/maps?q=Komisji+Edukacji+Narodowej+13,+37-450+Stalowa+Wola&hl=pl&z=16&output=embed"
+          width="600" height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ STOPKA ============ -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <div class="footer__brand">
+      <img class="footer__logo" src="img/logo.jpg" alt="Logo Elegancki Facet Classic Barbershop" loading="lazy" width="640" height="640">
+      <p><strong>Elegancki Facet</strong><br><em>Classic Barbershop · Stalowa Wola</em></p>
+    </div>
+
+    <nav class="footer__social" aria-label="Media społecznościowe">
+      <!-- TODO: podmień # na adresy profili -->
+      <a href="#" aria-label="Facebook" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H17V3.6c-.29-.04-1.27-.12-2.41-.12-2.39 0-4.02 1.46-4.02 4.13V9.9H7.9V13h2.67v8z"/></svg>
+      </a>
+      <a href="#" aria-label="Instagram" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92C8.42 2.21 8.8 2.2 12 2.2m0 5.6a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4m0 6.93a2.73 2.73 0 1 1 0-5.46 2.73 2.73 0 0 1 0 5.46m4.36-8.1a.98.98 0 1 0 0 1.96.98.98 0 0 0 0-1.96"/></svg>
+      </a>
+      <a href="#" aria-label="TikTok" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-2.9v11.67a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 0 1 0-5.18c.27 0 .52.04.76.12v-2.96a5.55 5.55 0 0 0-.76-.05 5.5 5.5 0 1 0 5.5 5.5V9.4a7.16 7.16 0 0 0 4.2 1.35V7.86a4.26 4.26 0 0 1-3.15-2.04"/></svg>
+      </a>
+    </nav>
+
+    <div class="footer__meta">
+      <p>© <span id="year">2026</span> Elegancki Facet Classic Barbershop</p>
+      <p><a href="#" class="link-muted">Polityka prywatności</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ LIGHTBOX ============ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Podgląd zdjęcia" hidden>
+  <button class="lightbox__close" id="lbClose" type="button" aria-label="Zamknij podgląd">&times;</button>
+  <button class="lightbox__nav lightbox__nav--prev" id="lbPrev" type="button" aria-label="Poprzednie zdjęcie">‹</button>
+  <img class="lightbox__img" id="lbImg" alt="">
+  <button class="lightbox__nav lightbox__nav--next" id="lbNext" type="button" aria-label="Następne zdjęcie">›</button>
+  <p class="lightbox__caption" id="lbCaption"></p>
+</div>
+
+<script src="js/main.js?v=27" defer></script>
+</body>
+</html>
