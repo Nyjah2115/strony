@@ -1125,4 +1125,290 @@ p strong{ color:var(--text); font-weight:500; }
   .js .hero__img{ animation:none; }        /* bez powolnego najazdu kadru */
   .scroll-cue__line::after{ animation:none; opacity:.5; }
   .btn:hover, .footer__social a:hover{ transform:none; }
+/* ==========================================================================
+   KARUZELA OPINII — "Elegancki Facet Classic Barbershop"
+   Czysty CSS, zero JS, zero zewnętrznych plików poza fontami (już masz).
+
+   Komponent czyta zmienne Twojego :root (--gold, --bg, --serif, --sans...).
+   Wklejony na stronę automatycznie przejmie Twoją paletę.
+   Wartości po przecinku to fallback, żeby działał też samodzielnie.
+   ========================================================================== */
+
+.ef-opinie {
+  /* --- USTAWIENIA --- */
+  --m-predkosc: 64s;                       /* wolno = elegancko */
+  --m-odstep: 1.75rem;
+  --m-karta-w: clamp(278px, 78vw, 372px);
+
+  /* --- kolory dziedziczone z Twojej strony --- */
+  --m-gold: var(--gold, #c9a15a);
+  --m-gold-soft: var(--gold-soft, #e3c68c);
+  --m-gold-dim: var(--gold-dim, rgba(201,161,90,.22));
+  --m-bg: var(--bg, #0a0a0a);
+  --m-text: var(--text, #f3f1ed);
+  --m-muted: var(--muted, #a3a09a);
+  --m-serif: var(--serif, "Cormorant Garamond", "Playfair Display", Georgia, serif);
+  --m-sans: var(--sans, "Inter", "Segoe UI", system-ui, -apple-system, sans-serif);
+  --m-ease: var(--ease, cubic-bezier(.22,.61,.36,1));
+
+  position: relative;
+  padding: 5.5rem 0 5rem;
+  background: var(--m-bg);
+  color: var(--m-text);
+  font-family: var(--m-sans);
+  overflow: hidden;
+}
+
+/* Złota poświata w tle — jak w Twojej sekcji opinii */
+.ef-opinie::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(60% 55% at 50% 40%, rgba(201,161,90,.07) 0%, transparent 70%);
+}
+
+/* --- Nagłówek --- */
+.ef-opinie__head {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto 3.25rem;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+.ef-opinie__eyebrow {
+  margin: 0 0 1rem;
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--m-gold);
+}
+.ef-opinie__title {
+  margin: 0;
+  font-family: var(--m-serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 5vw, 3.1rem);
+  line-height: 1.12;
+  letter-spacing: -.01em;
+}
+.ef-opinie__score {
+  display: inline-flex;
+  align-items: center;
+  gap: .85rem;
+  margin-top: 1.4rem;
+  padding: .6rem 1.4rem;
+  border: 1px solid var(--m-gold-dim);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.008));
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--m-muted);
+}
+.ef-opinie__score b {
+  font-family: var(--m-serif);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--m-gold-soft);
+  text-transform: none;
+}
+.ef-opinie__score .ef-gwiazdki { --s: 15px; margin-bottom: 0; }
+
+/* --- Taśma przewijająca --- */
+.ef-opinie__tasma {
+  position: relative;
+  z-index: 1;
+  /* wygaszenie krawędzi — działa na dowolnym tle, bez sztywnego koloru */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent);
+}
+
+.ef-opinie__pas {
+  display: flex;
+  align-items: stretch;
+  gap: var(--m-odstep);
+  width: max-content;
+  padding: .75rem 0;                 /* miejsce na unoszenie kart */
+  animation: ef-przewijaj var(--m-predkosc) linear infinite;
+  will-change: transform;
+}
+.ef-opinie__pas--wstecz {
+  animation-direction: reverse;
+  --m-predkosc: 78s;                 /* drugi pas wolniej — mniej nerwowo */
+}
+.ef-opinie__pas + .ef-opinie__pas { margin-top: .25rem; }
+
+@keyframes ef-przewijaj {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(calc(-50% - var(--m-odstep) / 2), 0, 0); }
+}
+
+/* Pauza po najechaniu + wyciszenie pozostałych kart */
+.ef-opinie__tasma:hover .ef-opinie__pas { animation-play-state: paused; }
+.ef-opinie__pas:hover .ef-opinia { opacity: .38; }
+.ef-opinie__pas .ef-opinia:hover { opacity: 1; }
+
+/* --- Karta opinii --- */
+.ef-opinia {
+  position: relative;
+  flex: 0 0 var(--m-karta-w);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 2.3rem 2rem 1.9rem;
+  border: 1px solid rgba(201,161,90,.18);
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.006) 100%);
+  box-shadow: 0 24px 60px -30px rgba(0,0,0,.9), inset 0 1px 1px rgba(255,255,255,.05);
+  transition: transform .5s var(--m-ease), border-color .5s var(--m-ease),
+              box-shadow .5s var(--m-ease), opacity .5s var(--m-ease);
+}
+.ef-opinia:hover {
+  transform: translateY(-6px);
+  border-color: rgba(201,161,90,.45);
+  box-shadow: 0 34px 74px -32px rgba(0,0,0,.95),
+              inset 0 1px 1px rgba(255,255,255,.07),
+              0 0 0 1px rgba(201,161,90,.12);
+}
+
+/* Złote narożniki — sygnaturowy detal z Twojej sekcji */
+.ef-opinia::before,
+.ef-opinia::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--m-gold);
+  opacity: .34;
+  pointer-events: none;
+  transition: opacity .5s var(--m-ease), width .5s var(--m-ease), height .5s var(--m-ease);
+}
+.ef-opinia::before { top: -1px; left: -1px;  border-right: 0; border-bottom: 0; }
+.ef-opinia::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+.ef-opinia:hover::before,
+.ef-opinia:hover::after { opacity: .9; width: 30px; height: 30px; }
+
+/* Cudzysłów-znak wodny */
+.ef-opinia__mark {
+  position: absolute;
+  top: .45rem;
+  right: 1.25rem;
+  font-family: var(--m-serif);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--m-gold);
+  opacity: .13;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ef-gwiazdki {
+  --s: 17px;
+  display: flex;
+  gap: .3rem;
+  color: var(--m-gold);
+  margin-bottom: 1.15rem;
+}
+.ef-gwiazdki svg {
+  width: var(--s);
+  height: var(--s);
+  filter: drop-shadow(0 2px 6px rgba(201,161,90,.35));
+}
+
+.ef-opinia__tekst {
+  margin: 0 0 1.6rem;
+  font-family: var(--m-serif);
+  font-size: 1.22rem;
+  font-weight: 400;
+  line-height: 1.52;
+  color: #e8e4dc;
+  letter-spacing: .002em;
+}
+
+.ef-opinia__autor {
+  display: flex;
+  align-items: center;
+  gap: .95rem;
+  margin-top: auto;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--m-gold-dim);
+}
+.ef-opinia__inicjaly {
+  flex: 0 0 42px;
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(201,161,90,.4);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, rgba(201,161,90,.16), transparent 70%);
+  font-family: var(--m-serif);
+  font-size: .95rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--m-gold-soft);
+}
+.ef-opinia__nazwa {
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--m-text);
+  line-height: 1.4;
+}
+.ef-opinia__zrodlo {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  margin-top: .3rem;
+  font-size: .7rem;
+  letter-spacing: .06em;
+  color: var(--m-muted);
+}
+.ef-opinia__zrodlo svg { width: 12px; height: 12px; flex: none; }
+
+/* --- Stopka sekcji --- */
+.ef-opinie__cta {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+  text-align: center;
+}
+.ef-opinie__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .3rem 0;
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: var(--m-gold);
+  text-decoration: none;
+  border-bottom: 1px solid var(--m-gold-dim);
+  transition: color .4s var(--m-ease), border-color .4s var(--m-ease);
+}
+.ef-opinie__link:hover { color: var(--m-gold-soft); border-color: var(--m-gold); }
+.ef-opinie__link span { transition: transform .4s var(--m-ease); }
+.ef-opinie__link:hover span { transform: translateX(4px); }
+
+/* --- Dostępność: bez animacji, ręczne przewijanie --- */
+@media (prefers-reduced-motion: reduce) {
+  .ef-opinie__pas { animation: none; }
+  .ef-opinie__tasma { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-mask-image: none; mask-image: none; }
+  .ef-opinia { scroll-snap-align: center; }
+}
+
+@media (max-width: 640px) {
+  .ef-opinie { padding: 4rem 0 3.5rem; }
+  .ef-opinia { padding: 2rem 1.6rem 1.6rem; }
+  .ef-opinia__tekst { font-size: 1.12rem; margin-bottom: 1.3rem; }
+  /* karty dopasowane do treści zamiast rozciąganych — bez pustych dziur */
+  .ef-opinie__pas { align-items: flex-start; }
+  .ef-opinie__tasma {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  }
 }
