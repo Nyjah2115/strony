@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podgląd — taśma opinii</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap">
+<style>
+/* --- fragment Twojego stylu, żeby podgląd wyglądał 1:1 --- */
+:root{
+  --bg:#0a0a0a; --bg-2:#101010; --surface:#1a1a1a; --surface-2:#202020;
+  --gold:#c9a15a; --gold-soft:#e3c68c; --gold-dim:rgba(201,161,90,.22);
+  --text:#f3f1ed; --muted:#a3a09a; --line:rgba(255,255,255,.09);
+  --serif:"Cormorant Garamond", Georgia, serif;
+  --sans:"Inter", system-ui, sans-serif;
+  --wrap:1180px; --ease:cubic-bezier(.22,.61,.36,1);
+}
+*,*::before,*::after{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); font-weight:300; line-height:1.7; overflow-x:hidden; }
+.section{ padding:6rem 0; }
+.wrap{ width:min(100% - 2.5rem, var(--wrap)); margin-inline:auto; }
+.section__head--center{ text-align:center; }
+.eyebrow{ font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin:0 0 .75rem; }
+h2{ font-family:var(--serif); font-weight:500; font-size:clamp(2rem,4vw,3rem); margin:0; }
+.link-gold{ color:var(--gold); border-bottom:1px solid var(--gold-dim); padding-bottom:2px; }
+.section--opinions{ position:relative; overflow:hidden; }
+.section--opinions::before{ content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(60% 55% at 50% 42%, rgba(201,161,90,.07) 0%, transparent 70%); }
+.section--opinions > .wrap{ position:relative; }
+.review-card{ display:flex; flex-direction:column; align-items:center; text-align:center;
+  width:100%; max-width:22rem; margin:2.25rem auto 0; padding:1.9rem 1.75rem;
+  border:1px solid rgba(201,161,90,.18); border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.008) 100%);
+  box-shadow:0 24px 60px -30px rgba(0,0,0,.9), inset 0 1px 1px rgba(255,255,255,.05); }
+.review-card__score{ margin:1.1rem 0 0; font-family:var(--serif); font-weight:600; line-height:1;
+  font-size:2.6rem; background:linear-gradient(180deg,#fff8ea 0%,var(--gold-soft) 45%,var(--gold) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; }
+.review-card__count{ font-size:1.5rem; font-weight:500; }
+.review-card__meta{ margin:.85rem 0 0; font-size:.78rem; line-height:1.55; color:var(--muted); max-width:26ch; }
+.review-card__stars{ display:flex; gap:.35rem; color:var(--gold); }
+.review-card__stars svg{ width:22px; height:22px; }
+.opinions__more{ text-align:center; margin:2.5rem 0 0; }
+
+/* ============ TU ZACZYNA SIĘ KOMPONENT (1-wklej-do-style.css) ============ */
+.ef-tasma{
+  --ef-karta-w: clamp(260px, calc((100vw - 7rem) / 4), 400px);  /* 4 karty na ekranie */
+  --ef-odstep: 1.5rem;
+  --ef-predkosc: 26px;                                          /* px na sekundę */
+  --ef-gold: var(--gold, #c9a15a);
+  --ef-gold-dim: var(--gold-dim, rgba(201,161,90,.22));
+  --ef-muted: var(--muted, #a3a09a);
+  --ef-serif: var(--serif, "Cormorant Garamond", Georgia, serif);
+  --ef-sans: var(--sans, "Inter", system-ui, sans-serif);
+
+  position:relative;
+  width:100vw; margin-left:calc(50% - 50vw);        /* pełna szerokość, mimo .wrap */
+  margin-top:3.5rem;
+  padding:.75rem 0;
+  overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+          mask-image:linear-gradient(90deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+
+.ef-tasma__pas{ display:flex; width:max-content; }
+.ef-tasma__grupa{ display:flex; gap:var(--ef-odstep); padding-right:var(--ef-odstep); }
+
+/* ruch od lewej do prawej — pas startuje przesunięty i wraca do zera */
+.ef-tasma.is-gotowa .ef-tasma__pas{
+  animation:ef-jazda var(--ef-czas, 60s) linear infinite;
+  will-change:transform;
+}
+@keyframes ef-jazda{
+  from{ transform:translate3d(-50%,0,0); }
+  to  { transform:translate3d(0,0,0); }
+}
+/* taśma jedzie zawsze — bez pauzy pod kursorem */
+/* ...ale poza ekranem staje, żeby nie mielić procesora */
+.ef-tasma.poza-ekranem .ef-tasma__pas{ animation-play-state:paused; }
+
+/* bez JS albo przy wyłączonych animacjach — zwykły przewijany rząd */
+.ef-tasma:not(.is-gotowa){ overflow-x:auto; scrollbar-width:none; }
+.ef-tasma:not(.is-gotowa)::-webkit-scrollbar{ display:none; }
+
+/* ---------- pojedyncza karta ----------
+   Styl „Exaggerated Minimalism" z bazy skilla: cytat gra pierwsze skrzypce,
+   reszta schodzi do roli podpisu, między elementami jest powietrze.
+   Odstępy trzymają się skali 8/16/24/32 px (density 4/10 = standard). */
+.ef-opinia{
+  position:relative; flex:0 0 var(--ef-karta-w); width:var(--ef-karta-w);
+  display:flex; flex-direction:column; margin:0;
+  padding:2rem 1.75rem 1.5rem;
+  border:1px solid rgba(201,161,90,.16); border-radius:14px;
+  background:linear-gradient(180deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.006) 100%);
+  box-shadow:0 26px 60px -34px rgba(0,0,0,.95), inset 0 1px 1px rgba(255,255,255,.045);
+  transition:border-color .25s var(--ease), transform .25s var(--ease);  /* checklist: 150-300 ms */
+}
+.ef-opinia:hover{ border-color:rgba(201,161,90,.42); transform:translateY(-4px); }
+
+/* gwiazdki jako SVG — ten sam kształt co w karcie z oceną 5,0.
+   Checklist z bazy: ikony rysujemy, nie wstawiamy znakiem ★ */
+.ef-opinia__gwiazdki{
+  display:flex; gap:.28rem; color:var(--ef-gold); margin-bottom:1.5rem;
+}
+.ef-opinia__gwiazdki svg{ width:14px; height:14px; display:block; }
+.ef-opinia__tekst{
+  flex:1 1 auto; margin:0 0 2rem;               /* flex:1 → wszystkie karty równej wysokości */
+  font-family:var(--ef-serif); font-style:italic; font-weight:400;
+  font-size:clamp(1.18rem, 1.35vw, 1.34rem); line-height:1.5;
+  letter-spacing:-.005em; color:#f6f4f0;
+}
+.ef-opinia__autor{
+  display:flex; align-items:center; gap:.8rem;
+  padding-top:1.25rem; border-top:1px solid var(--ef-gold-dim);
+}
+.ef-opinia__inicjaly{
+  flex:0 0 auto; display:grid; place-items:center;
+  width:38px; height:38px; border-radius:50%;
+  border:1px solid rgba(201,161,90,.35); color:var(--ef-gold);
+  font-family:var(--ef-sans); font-size:.72rem; font-weight:500; letter-spacing:.08em;
+}
+.ef-opinia__dane{ display:flex; flex-direction:column; gap:.15rem; min-width:0; }
+/* nazwisko może się zawinąć na dwie linie — lepsze niż ucięcie kogoś wielokropkiem */
+.ef-opinia__nazwa{
+  font-family:var(--ef-sans); font-size:.74rem; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:#e8e4dc;
+  line-height:1.35;
+}
+.ef-opinia__zrodlo{ font-family:var(--ef-sans); font-size:.78rem; color:var(--ef-muted); letter-spacing:.04em; }
+
+@media (max-width:640px){
+  .ef-tasma{ --ef-karta-w:min(78vw, 320px); --ef-odstep:1rem; }
+  .ef-opinia__tekst{ font-size:1.2rem; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ef-tasma .ef-tasma__pas{ animation:none !important; }
+  .ef-tasma{ overflow-x:auto; }
+}
+/* ============ KONIEC KOMPONENTU ============ */
+</style>
+</head>
+<body>
+
+<section class="section section--opinions" id="opinie">
+  <div class="wrap">
+    <header class="section__head section__head--center">
+      <p class="eyebrow">Opinie</p>
+      <h2>Co mówią klienci</h2>
+      <div class="review-card">
+        <div class="review-card__stars" aria-hidden="true">★★★★★</div>
+        <p class="review-card__score">5,0<span class="review-card__count"> (53 opinie)</span></p>
+        <p class="review-card__meta">Ocena wyjątkowa — wszystkie opinie w Google na 5 gwiazdek.</p>
+      </div>
+    </header>
+  </div>
+
+  <!-- ======= TAŚMA OPINII ======= -->
+  <div class="ef-tasma reveal" id="ef-tasma" aria-label="Opinie klientów">
+    <div class="ef-tasma__pas" id="ef-pas">
+      <div class="ef-tasma__grupa" data-ef-grupa>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Elegancki wystrój, bardzo miły klimat i pełen profesjonalizm. Fachowa usługa na najwyższym poziomie, ciekawe rozmowy i świetna atmosfera.</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">MB</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Mariusz Baran</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Bardzo profesjonalne strzyżenie, dopieszczone w najmniejszych szczegółach. Jeszcze nigdy moja fryzura i broda nie wyglądały tak dobrze.</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">AD</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Andrzej Dulda</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Elegancja, styl i pełna precyzja w każdym szczególe. Widać, że to facet, który zna się na swoim fachu i robi swoją robotę z pasją.</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">SD</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Sławomir Dzięgiel</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Właściciel to prawdziwy barber z zamiłowaniem. Indywidualnie podchodzi do klienta, doradzi, wyjaśni i co najważniejsze brak pośpiechu, a przy tym perfekcja.</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">ŁB</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Łukasz Blicharz</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Rewelacyjny barbershop. Fryzura i broda 10/10. Facet wie co robi!</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">TM</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Tadeusz Majkowski</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+        <figure class="ef-opinia">
+          <div class="ef-opinia__gwiazdki" role="img" aria-label="Ocena 5 na 5"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <blockquote class="ef-opinia__tekst">Fryzura wygląda dokładnie tak jak chciałem. Widać, że osoba zna się na swoim fachu i podchodzi do klienta z pasją.</blockquote>
+          <figcaption class="ef-opinia__autor">
+            <span class="ef-opinia__inicjaly" aria-hidden="true">K</span>
+            <span class="ef-opinia__dane">
+              <span class="ef-opinia__nazwa">Kacper</span>
+              <span class="ef-opinia__zrodlo">Opinia w Google</span>
+            </span>
+          </figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <p class="opinions__more">
+      <a class="link-gold" href="#">Zobacz wszystkie opinie w Google →</a>
+    </p>
+  </div>
+</section>
+
+<script>
+/* TAŚMA OPINII — dokleja kopie kart tak, żeby pętla była bezszwowa */
+(function () {
+  var tasma = document.getElementById('ef-tasma');
+  var pas   = document.getElementById('ef-pas');
+  if (!tasma || !pas) return;
+
+  var grupa = pas.querySelector('[data-ef-grupa]');
+  if (!grupa) return;
+
+  var oryginal = [].slice.call(grupa.children);
+  if (!oryginal.length) return;
+
+  function zbuduj() {
+    tasma.classList.remove('is-gotowa');
+
+    // 1. czyścimy poprzednie kopie
+    [].slice.call(pas.children).forEach(function (g, i) { if (i > 0) g.remove(); });
+    [].slice.call(grupa.children).forEach(function (el, i) { if (i >= oryginal.length) el.remove(); });
+
+    // 2. grupa musi być szersza niż ekran, inaczej po prawej zrobi się dziura
+    var bezpiecznik = 0;
+    while (grupa.scrollWidth < tasma.clientWidth + 200 && bezpiecznik < 12) {
+      oryginal.forEach(function (el) { grupa.appendChild(el.cloneNode(true)); });
+      bezpiecznik++;
+    }
+
+    // 3. druga, identyczna grupa — to ona zapewnia płynne zapętlenie
+    var kopia = grupa.cloneNode(true);
+    kopia.setAttribute('aria-hidden', 'true');
+    kopia.removeAttribute('data-ef-grupa');
+    pas.appendChild(kopia);
+
+    // 4. czas przejazdu liczony ze stałej prędkości (px/s)
+    var predkosc = parseFloat(getComputedStyle(tasma).getPropertyValue('--ef-predkosc')) || 42;
+    tasma.style.setProperty('--ef-czas', (grupa.scrollWidth / predkosc).toFixed(1) + 's');
+
+    tasma.classList.add('is-gotowa');
+  }
+
+  zbuduj();
+
+  // gdy sekcja jest poza ekranem, zatrzymujemy animację — mniej pracy procesora i baterii
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (wpisy) {
+      wpisy.forEach(function (w) {
+        tasma.classList.toggle('poza-ekranem', !w.isIntersecting);
+      });
+    }, { rootMargin: '150px 0px' }).observe(tasma);
+  }
+
+  var t = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(t);
+    t = setTimeout(zbuduj, 250);
+  });
+})();
+</script>
+
+</body>
+</html>
