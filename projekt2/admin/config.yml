@@ -1,0 +1,55 @@
+# ============================================================
+#  Konfiguracja panelu edycji (Decap CMS)
+#  Właściciel edytuje flotę pod adresem:  https://TWOJA-DOMENA.pl/admin/
+# ============================================================
+
+backend:
+  name: git-gateway        # logowanie przez Netlify Identity
+  branch: main             # gałąź repozytorium (zwykle "main")
+
+# Do testu LOKALNEGO na komputerze:
+#   1) uruchom stronę:  start.bat
+#   2) w drugim oknie:  npx decap-server
+#   3) wejdź na:        http://localhost:4173/admin/
+# (wtedy poniższa linia musi być odkomentowana; przy publikacji ją zostaw — nie szkodzi)
+local_backend: true
+
+media_folder: "media"      # tu trafiają wgrane zdjęcia (w repozytorium)
+public_folder: "/media"
+
+locale: "pl"
+
+collections:
+  - name: "flota"
+    label: "Flota — pojazdy"
+    files:
+      - name: "pojazdy"
+        label: "Lista pojazdów"
+        file: "data/flota.json"
+        description: "Dodawaj, edytuj kolejność i usuwaj pojazdy z oferty. Po zapisaniu strona zaktualizuje się automatycznie."
+        fields:
+          - name: "pojazdy"
+            label: "Pojazdy"
+            label_singular: "Pojazd"
+            widget: "list"
+            summary: "{{fields.marka}} — {{fields.cena}} ({{fields.status}})"
+            fields:
+              - { name: "marka", label: "Marka i model", widget: "string", hint: "np. Scania R 500" }
+              - { name: "typ", label: "Typ / krótki opis", widget: "string", hint: "np. Ciągnik siodłowy · 4×2" }
+              - { name: "rok", label: "Rok produkcji", widget: "number", value_type: "int", min: 1980, max: 2100 }
+              - { name: "przebieg", label: "Przebieg", widget: "string", hint: "np. 456 000 km" }
+              - { name: "moc", label: "Moc", widget: "string", hint: "np. 500 KM" }
+              - { name: "cena", label: "Cena netto", widget: "string", hint: "np. 289 000 PLN" }
+              - name: "status"
+                label: "Status"
+                widget: "select"
+                default: "Dostępny"
+                options: ["Dostępny", "Rezerwacja", "Nowość", "Sprzedany"]
+              - name: "kategoria"
+                label: "Sylwetka na liście"
+                widget: "select"
+                default: "ciagnik"
+                options:
+                  - { label: "Ciągnik siodłowy", value: "ciagnik" }
+                  - { label: "Wywrotka", value: "wywrotka" }
+                  - { label: "Zestaw / naczepa", value: "zestaw" }
