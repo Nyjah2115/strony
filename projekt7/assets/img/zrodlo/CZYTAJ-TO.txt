@@ -1,0 +1,37 @@
+Wrzuć tutaj własne zdjęcia restauracji, nazwane dokładnie jak sloty poniżej,
+a potem uruchom z katalogu głównego strony:
+
+    bash narzedzia/przygotuj-zdjecia.sh
+
+Skrypt sam przeskaluje, przytnie i skompresuje każde zdjęcie do właściwego
+rozmiaru i podmieni je w assets/img/. Możesz podmieniać po kolei — brakujące
+sloty zostaną nietknięte.
+
+STRONA GŁÓWNA (karuzela w nagłówku, kadr poziomy 4:3)
+    hero-padthai        najlepsze zdjęcie Padthaia
+    hero-curry          curry (pojawia się też jako pas na stronie Menu)
+    hero-wok            danie z woka
+    hero-tomyum         zupa Tom-Yam-Gung
+
+KAFELKI KATEGORII na stronie głównej (kadr poziomy 3:2)
+    kat-pad-thai        kat-curry           kat-miesne
+    kat-makaron         kat-com-chien       kat-zupy
+    kat-przystawki      kat-snack-box
+
+GALERIA (kwadraty 1:1, oprócz galeria-9)
+    galeria-1 ... galeria-8
+    galeria-9           szeroki kadr 2:1 — najlepiej wnętrze lokalu
+
+PODSTRONY (kadr poziomy 4:3)
+    wnetrze             sala restauracji            -> O nas
+    zespol              kuchnia / zespół przy pracy -> O nas
+    rezerwacja          nakryty stolik              -> Rezerwacja
+
+PROMOCJE (kadr poziomy 3:2)
+    promo-zestaw        promo-rodzinny      promo-weekend
+
+WSKAZÓWKI
+  - Im większy oryginał, tym lepiej — skrypt sam go zmniejszy.
+  - Rób zdjęcia w świetle dziennym, danie ustaw na wprost lub pod kątem 45°.
+  - Kadruj z zapasem: skrypt przycina od środka do wymaganych proporcji.
+  - Obsługiwane formaty: .jpg .jpeg .png .heic (prosto z iPhone'a też zadziała).

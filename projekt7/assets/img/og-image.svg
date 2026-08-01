@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#2C2C2C"/>
+  <g fill="none" stroke="#D49653" stroke-opacity="0.4" stroke-width="2.5" stroke-linecap="round">
+    <path d="M960 130 h180 a90 90 0 0 1 -180 0 z"/>
+    <path d="M940 130 h220"/>
+    <path d="M1010 86 c0 -21 -21 -27 -21 -48 M1050 82 c0 -26 -26 -32 -26 -55 M1090 86 c0 -21 -21 -27 -21 -48"/>
+  </g>
+  <text x="80" y="200" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="7"
+        fill="#D49653">KUCHNIA TAJSKA &#183; STALOWA WOLA</text>
+  <text x="80" y="320" font-family="Georgia, 'Times New Roman', serif" font-size="88"
+        fill="#E4DACA">smaki, które</text>
+  <text x="80" y="410" font-family="Georgia, 'Times New Roman', serif" font-size="88"
+        fill="#E4DACA">zostaj&#261; w pami&#281;ci</text>
+  <text x="80" y="500" font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#B9AE9C">
+    Thaicooking &#183; ul. Poniatowskiego 80 &#183; tel. 579 291 252</text>
+  <rect x="80" y="530" width="4" height="52" fill="#D49653"/>
+  <text x="104" y="566" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#E4DACA">
+    Ocena 4,4 / 5 w Google &#183; 510 opinii</text>
+</svg>
