@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pizzeria Fiori — Stalowa Wola | Rezerwacja stolika</title>
+<meta name="description" content="Pizzeria Fiori w Stalowej Woli — włoska pizza z pieca, makarony, sałatki. Zarezerwuj stolik online. Strona demonstracyjna.">
+
+<!-- ============================================================
+     PIZZERIA FIORI — makieta strony (one-page)
+     Projekt demonstracyjny. Nie do publikacji produkcyjnej.
+     Struktura pliku:
+       1. Zmienne CSS i reset
+       2. Nawigacja
+       3. Hero (karuzela)
+       4. Odkryj Fiori
+       5. Menu (zakładki)
+       6. Galeria
+       7. Rezerwacja (formularz)
+       8. Godziny otwarcia
+       9. Kontakt + mapa
+      10. Stopka + modal
+      11. JavaScript (na końcu pliku)
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+<style>
+/* ============================================================
+   1. ZMIENNE I RESET
+   ============================================================ */
+:root{
+  /* Paleta wzorowana na motywie "ROSA" */
+  --bg-dark:#12161c;          /* główne ciemne tło */
+  --bg-dark-2:#1b2027;        /* jaśniejszy grafit (sekcje naprzemienne) */
+  --bg-dark-3:#0d1116;        /* najciemniejszy (stopka) */
+  --gold:#c9a24b;             /* złoty akcent */
+  --gold-soft:#e0c179;        /* jaśniejsze złoto (hover) */
+  --cream:#f4f1ea;            /* off-white na tekst */
+  --cream-dim:#b9b4a9;        /* przygaszony tekst pomocniczy */
+  --light-bg:#ffffff;         /* jasna sekcja */
+  --light-bg-2:#f7f4ef;       /* jasna sekcja alternatywna */
+  --ink:#20242b;              /* tekst na jasnym tle */
+  --ink-dim:#5d626b;
+  --error:#e0736b;
+  --success:#7fb069;
+
+  --font-script:'Great Vibes', cursive;
+  --font-display:'Montserrat', sans-serif;
+  --font-body:'Cormorant Garamond', Georgia, serif;
+
+  --nav-h:82px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:var(--nav-h);}
+body{
+  margin:0;
+  background:var(--bg-dark);
+  color:var(--cream);
+  font-family:var(--font-body);
+  font-size:19px;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;}
+
+/* Widoczny focus — dostępność klawiaturowa */
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+/* Link "przejdź do treści" dla czytników ekranu */
+.skip-link{
+  position:absolute;left:-9999px;top:0;z-index:2000;
+  background:var(--gold);color:var(--bg-dark);padding:12px 20px;
+  font-family:var(--font-display);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+}
+.skip-link:focus{left:12px;top:12px;}
+
+/* --- typografia wspólna --- */
+.script{
+  font-family:var(--font-script);
+  color:var(--gold);
+  font-size:clamp(2.1rem,5vw,3.4rem);
+  line-height:1.1;
+  font-weight:400;
+}
+.display{
+  font-family:var(--font-display);
+  font-weight:500;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+}
+.section-label{
+  font-family:var(--font-display);
+  font-size:11px;
+  letter-spacing:.35em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin:0 0 6px;
+}
+
+/* Ozdobna linia z rombem — powtarzalny element wzoru */
+.divider{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin:26px auto;max-width:280px;
+}
+.divider::before,.divider::after{
+  content:'';height:1px;flex:1;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:.75;
+}
+.divider i{color:var(--gold);font-size:9px;transform:rotate(45deg);
+  width:8px;height:8px;border:1px solid var(--gold);display:inline-block;}
+.divider--dark i{border-color:var(--gold);}
+
+/* Odstępy sekcji */
+.section{padding:clamp(74px,10vw,130px) 0;}
+.container{width:min(1180px,92vw);margin-inline:auto;}
+.narrow{width:min(760px,92vw);margin-inline:auto;}
+
+/* Animacja pojawiania się przy scrollu */
+.reveal{opacity:0;transform:translateY(34px);
+  transition:opacity .9s var(--ease),transform .9s var(--ease);}
+.reveal.is-visible{opacity:1;transform:none;}
+.reveal-delay-1{transition-delay:.12s;}
+.reveal-delay-2{transition-delay:.24s;}
+.reveal-delay-3{transition-delay:.36s;}
+
+/* Przycisk główny */
+.btn{
+  display:inline-block;
+  font-family:var(--font-display);
+  font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;
+  padding:17px 42px;
+  border:1px solid var(--gold);
+  background:transparent;color:var(--gold);
+  transition:background .45s var(--ease),color .45s var(--ease),letter-spacing .45s var(--ease);
+}
+.btn:hover,.btn:focus-visible{background:var(--gold);color:var(--bg-dark);letter-spacing:.3em;}
+.btn--solid{background:var(--gold);color:var(--bg-dark);}
+.btn--solid:hover,.btn--solid:focus-visible{background:var(--gold-soft);border-color:var(--gold-soft);color:var(--bg-dark);}
+
+/* ============================================================
+   2. NAWIGACJA
+   ============================================================ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:1000;
+  height:var(--nav-h);
+  display:flex;align-items:center;
+  background:transparent;
+  transition:background .5s var(--ease),height .5s var(--ease),box-shadow .5s var(--ease);
+}
+.nav::after{ /* delikatny gradient pod menu na hero, poprawia czytelność */
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(10,13,17,.72),transparent);
+  transition:opacity .5s var(--ease);
+}
+.nav.is-scrolled{background:var(--bg-dark);height:68px;box-shadow:0 1px 0 rgba(201,162,75,.22);}
+.nav.is-scrolled::after{opacity:0;}
+.nav__inner{width:min(1180px,92vw);margin-inline:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.nav__brand{display:flex;flex-direction:column;line-height:1;}
+.nav__brand-name{font-family:var(--font-display);font-weight:600;letter-spacing:.34em;font-size:16px;text-transform:uppercase;color:var(--cream);}
+.nav__brand-sub{font-family:var(--font-display);font-size:8.5px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-top:6px;}
+.nav__links{display:flex;align-items:center;gap:34px;list-style:none;margin:0;padding:0;}
+.nav__links a{
+  position:relative;
+  font-family:var(--font-display);font-size:11px;font-weight:400;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--cream);
+  padding:6px 0;transition:color .35s var(--ease);
+}
+.nav__links a::after{
+  content:'';position:absolute;left:50%;bottom:0;width:0;height:1px;background:var(--gold);
+  transform:translateX(-50%);transition:width .4s var(--ease);
+}
+.nav__links a:hover,.nav__links a:focus-visible{color:var(--gold);}
+.nav__links a:hover::after,.nav__links a:focus-visible::after{width:100%;}
+.nav__links .nav__cta{border:1px solid var(--gold);padding:11px 22px;color:var(--gold);}
+.nav__links .nav__cta::after{display:none;}
+.nav__links .nav__cta:hover{background:var(--gold);color:var(--bg-dark);}
+
+/* Hamburger */
+.nav__burger{
+  display:none;background:none;border:0;padding:10px;color:var(--cream);
+  font-size:20px;line-height:1;
+}
+
+/* ============================================================
+   3. HERO — pełnoekranowa karuzela
+   ============================================================ */
+.hero{position:relative;height:100svh;min-height:600px;display:grid;place-items:center;overflow:hidden;}
+.hero__slides{position:absolute;inset:0;}
+.hero__slide{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:0;transform:scale(1.08);
+  transition:opacity 1.6s var(--ease),transform 8s linear;
+}
+.hero__slide.is-active{opacity:1;transform:scale(1);}
+.hero__overlay{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at center,rgba(10,13,17,.42) 0%,rgba(10,13,17,.82) 78%),
+    linear-gradient(180deg,rgba(10,13,17,.5),rgba(10,13,17,.35) 45%,rgba(18,22,28,.95));
+}
+.hero__content{position:relative;text-align:center;padding:0 20px;max-width:1180px;}
+.hero__welcome{font-family:var(--font-script);color:var(--gold);font-size:clamp(2.4rem,6vw,4rem);margin:0 0 4px;}
+.hero__name{
+  font-family:var(--font-display);font-weight:600;
+  font-size:clamp(2.1rem,7.4vw,5rem);
+  letter-spacing:.14em;text-transform:uppercase;
+  margin:0;color:var(--cream);
+  text-shadow:0 4px 40px rgba(0,0,0,.6);
+}
+.hero__sub{
+  font-family:var(--font-display);font-size:clamp(10px,1.6vw,13px);
+  letter-spacing:.5em;text-transform:uppercase;color:var(--cream-dim);
+  margin:0 0 34px;
+}
+.hero__meta{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--cream-dim);margin-top:38px;
+}
+.hero__meta span{color:var(--gold);}
+
+/* Wskaźnik slajdów w prawym dolnym rogu */
+.hero__dots{
+  position:absolute;right:clamp(20px,5vw,60px);bottom:clamp(28px,6vw,54px);
+  display:flex;gap:12px;z-index:3;
+}
+.hero__dot{
+  width:9px;height:9px;border-radius:50%;padding:0;
+  border:1px solid var(--gold);background:transparent;
+  transition:background .4s var(--ease),transform .4s var(--ease);
+}
+.hero__dot.is-active{background:var(--gold);transform:scale(1.25);}
+.hero__scroll{
+  position:absolute;left:50%;bottom:34px;transform:translateX(-50%);
+  color:var(--cream-dim);font-size:14px;animation:bob 2.6s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,10px);}}
+
+/* ============================================================
+   4. ODKRYJ FIORI — jasna sekcja
+   ============================================================ */
+.light{background:var(--light-bg);color:var(--ink);}
+.light .section-label{color:#a8863a;}
+.light .script{color:#a8863a;}
+.discover__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,5vw,72px);align-items:center;}
+.discover__photos{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:14px;}
+.discover__photos figure{margin:0;overflow:hidden;}
+.discover__photos img{width:100%;height:100%;object-fit:cover;transition:transform 1.1s var(--ease);}
+.discover__photos figure:hover img{transform:scale(1.07);}
+.discover__photos .tall{grid-row:span 2;}
+.discover__photos .tall img{height:clamp(300px,44vw,470px);}
+.discover__photos .short img{height:clamp(140px,21vw,228px);}
+.discover__text h2{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:.2em;text-transform:uppercase;
+  margin:.2em 0 0;color:var(--ink);
+}
+.discover__text p{color:var(--ink-dim);margin:0 0 1.1em;}
+.discover__text .divider{margin-inline:0;justify-content:flex-start;}
+.discover__stats{display:flex;gap:38px;flex-wrap:wrap;margin-top:34px;padding-top:28px;border-top:1px solid rgba(0,0,0,.09);}
+.discover__stat b{display:block;font-family:var(--font-display);font-size:26px;font-weight:600;color:#a8863a;letter-spacing:.04em;}
+.discover__stat span{font-family:var(--font-display);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-dim);}
+
+/* ============================================================
+   5. MENU
+   ============================================================ */
+.menu{background:var(--bg-dark-2);}
+.section-head{text-align:center;margin-bottom:56px;}
+.section-head h2{
+  font-family:var(--font-display);font-weight:500;
+  font-size:clamp(1.25rem,3vw,1.85rem);letter-spacing:.24em;text-transform:uppercase;
+  margin:0;
+}
+.menu__tabs{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:6px;
+  margin-bottom:54px;border-bottom:1px solid rgba(201,162,75,.2);padding-bottom:2px;
+}
+.menu__tab{
+  background:none;border:0;border-bottom:2px solid transparent;
+  font-family:var(--font-display);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--cream-dim);padding:13px 20px;
+  transition:color .35s var(--ease),border-color .35s var(--ease);
+}
+.menu__tab:hover{color:var(--cream);}
+.menu__tab[aria-selected="true"]{color:var(--gold);border-bottom-color:var(--gold);}
+.menu__panel[hidden]{display:none;}
+.menu__list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px 56px;}
+.menu__item{
+  display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:baseline;
+  padding:18px 14px;border-bottom:1px solid rgba(255,255,255,.055);
+  transition:background .4s var(--ease),padding-left .4s var(--ease);
+}
+.menu__item:hover{background:rgba(201,162,75,.055);padding-left:22px;}
+.menu__item h3{
+  font-family:var(--font-display);font-size:12.5px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase;margin:0;color:var(--cream);
+}
+.menu__price{font-family:var(--font-display);font-size:14px;font-weight:500;color:var(--gold);white-space:nowrap;letter-spacing:.05em;}
+.menu__desc{grid-column:1/-1;font-size:16px;font-style:italic;color:var(--cream-dim);line-height:1.5;margin:0;}
+.menu__badge{
+  display:inline-block;margin-left:9px;vertical-align:middle;
+  font-family:var(--font-display);font-size:8px;letter-spacing:.16em;
+  border:1px solid var(--gold);color:var(--gold);padding:3px 7px;text-transform:uppercase;
+}
+.menu__note{text-align:center;font-size:15px;font-style:italic;color:var(--cream-dim);margin-top:44px;}
+
+/* Nagłówek rozmiarów pizzy — powtórzony nad każdą kolumną siatki */
+.menu__sizes{display:grid;grid-template-columns:1fr auto;padding:0 14px 9px;border-bottom:1px solid rgba(201,162,75,.28);}
+.menu__sizes b{font-family:var(--font-display);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+/* Podkategorie wewnątrz zakładki (Herbata, Kawa, Piwo beczkowe…) */
+.menu__sub{
+  grid-column:1/-1;font-family:var(--font-display);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--gold);padding:0 14px 10px;margin:46px 0 2px;
+  border-bottom:1px solid rgba(201,162,75,.18);
+}
+.menu__sub:first-child{margin-top:0;}
+/* Dwie ceny obok siebie — pizza 32 cm / 42 cm */
+.price2{display:flex;gap:16px;}
+.price2 b{min-width:54px;text-align:right;font-weight:500;}
+.menu__num{color:var(--cream-dim);font-weight:400;margin-right:3px;}
+.menu__hot{color:#d9634f;font-size:10px;margin-left:7px;vertical-align:baseline;}
+.menu__vol{color:var(--cream-dim);font-size:11px;font-family:var(--font-display);letter-spacing:.08em;margin-right:10px;}
+.menu__extra{grid-column:1/-1;font-size:14.5px;font-style:italic;color:var(--cream-dim);padding:18px 14px 0;margin:0;}
+
+/* ============================================================
+   6. GALERIA
+   ============================================================ */
+.gallery{background:var(--bg-dark);}
+.gallery__grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:190px;gap:12px;
+}
+.gallery__grid figure{margin:0;position:relative;overflow:hidden;background:var(--bg-dark-2);}
+.gallery__grid img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease),filter .6s var(--ease);filter:saturate(.92);}
+.gallery__grid figure:hover img{transform:scale(1.08);filter:saturate(1.05);}
+.gallery__grid figure::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(10,13,17,.55));
+  opacity:0;transition:opacity .5s var(--ease);
+}
+.gallery__grid figure:hover::after{opacity:1;}
+.g-wide{grid-column:span 2;}
+.g-tall{grid-row:span 2;}
+
+/* ============================================================
+   7. REZERWACJA
+   ============================================================ */
+.booking{position:relative;background:var(--bg-dark-2);overflow:hidden;}
+.booking__bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  opacity:.13;filter:grayscale(.35);
+}
+.booking__bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,var(--bg-dark-2),rgba(27,32,39,.72),var(--bg-dark-2));}
+.booking .container{position:relative;}
+.booking__wrap{
+  background:rgba(18,22,28,.86);
+  border:1px solid rgba(201,162,75,.28);
+  padding:clamp(28px,5vw,62px);
+}
+.form__grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 28px;}
+.field{display:flex;flex-direction:column;gap:9px;}
+.field--full{grid-column:1/-1;}
+.field label{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream-dim);
+}
+.field label .req{color:var(--gold);margin-left:3px;}
+.field input,.field select,.field textarea{
+  font-family:var(--font-body);font-size:17px;color:var(--cream);
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.14);
+  padding:14px 16px;width:100%;
+  transition:border-color .35s var(--ease),background .35s var(--ease);
+}
+.field textarea{resize:vertical;min-height:104px;}
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--gold);background:rgba(201,162,75,.06);
+}
+.field select option{background:var(--bg-dark);color:var(--cream);}
+.field input::placeholder,.field textarea::placeholder{color:rgba(185,180,169,.5);font-style:italic;}
+/* Ujednolicenie natywnych kontrolek daty w przeglądarkach WebKit */
+.field input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.75) sepia(1) saturate(3) hue-rotate(5deg);cursor:pointer;}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border-color:var(--error);}
+.field__error{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.1em;
+  color:var(--error);min-height:14px;text-transform:none;
+}
+.field__hint{font-size:14px;font-style:italic;color:var(--cream-dim);margin:0;}
+.form__footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px;margin-top:34px;}
+.form__footer .note{font-size:15px;font-style:italic;color:var(--cream-dim);margin:0;max-width:420px;}
+.booking__aside{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;text-align:center;
+}
+.booking__aside div{border:1px solid rgba(201,162,75,.2);padding:22px 16px;}
+.booking__aside i{color:var(--gold);font-size:17px;}
+.booking__aside b{display:block;font-family:var(--font-display);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:10px 0 4px;color:var(--cream);}
+.booking__aside span{font-size:15px;color:var(--cream-dim);}
+
+/* ============================================================
+   8. GODZINY OTWARCIA
+   ============================================================ */
+.hours{background:var(--light-bg-2);color:var(--ink);}
+.hours__grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,80px);align-items:center;}
+.hours table{width:100%;border-collapse:collapse;}
+.hours th{
+  font-family:var(--font-display);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  text-align:left;color:var(--ink-dim);font-weight:500;padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,.12);
+}
+.hours th:last-child{text-align:right;}
+.hours td{padding:15px 0;border-bottom:1px solid rgba(0,0,0,.07);font-size:18px;}
+.hours td:last-child{text-align:right;font-family:var(--font-display);font-size:14px;letter-spacing:.06em;color:#a8863a;}
+.hours tr.is-today td{font-weight:500;}
+.hours tr.is-today td:first-child::before{
+  content:'';display:inline-block;width:6px;height:6px;border-radius:50%;
+  background:var(--success);margin-right:10px;vertical-align:middle;
+}
+.hours__photo img{width:100%;height:clamp(300px,42vw,460px);object-fit:cover;}
+
+/* ============================================================
+   9. KONTAKT + MAPA
+   ============================================================ */
+.contact{background:var(--bg-dark);}
+.contact__grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:stretch;}
+.contact__list{list-style:none;margin:30px 0 0;padding:0;display:grid;gap:26px;}
+.contact__list li{display:flex;gap:18px;align-items:flex-start;}
+.contact__list i{color:var(--gold);font-size:15px;width:22px;flex:none;margin-top:7px;}
+.contact__list b{
+  display:block;font-family:var(--font-display);font-size:10px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--cream-dim);margin-bottom:3px;font-weight:400;
+}
+.contact__list a:hover{color:var(--gold);}
+.contact__map{min-height:400px;border:1px solid rgba(201,162,75,.25);}
+.contact__map iframe{width:100%;height:100%;min-height:400px;border:0;display:block;filter:grayscale(.4) contrast(1.05);}
+
+/* ============================================================
+   10. STOPKA
+   ============================================================ */
+.footer{background:var(--bg-dark-3);padding:70px 0 34px;text-align:center;border-top:1px solid rgba(201,162,75,.16);}
+.footer__name{font-family:var(--font-display);font-weight:600;letter-spacing:.36em;font-size:19px;text-transform:uppercase;}
+.footer__tag{font-family:var(--font-script);color:var(--gold);font-size:26px;margin:2px 0 0;}
+.footer__social{display:flex;justify-content:center;gap:16px;margin:30px 0 26px;list-style:none;padding:0;}
+.footer__social a{
+  width:42px;height:42px;display:grid;place-items:center;
+  border:1px solid rgba(201,162,75,.35);color:var(--gold);
+  transition:background .4s var(--ease),color .4s var(--ease),transform .4s var(--ease);
+}
+.footer__social a:hover{background:var(--gold);color:var(--bg-dark);transform:translateY(-3px);}
+.footer__meta{font-size:15px;color:var(--cream-dim);margin:0;}
+.footer__disclaimer{
+  margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.06);
+  font-size:13.5px;color:rgba(185,180,169,.62);font-style:italic;
+}
+
+/* ============================================================
+   MODAL POTWIERDZENIA REZERWACJI
+   ============================================================ */
+.modal{
+  position:fixed;inset:0;z-index:1500;
+  display:grid;place-items:center;padding:20px;
+  background:rgba(8,10,14,.82);backdrop-filter:blur(4px);
+  opacity:0;visibility:hidden;transition:opacity .45s var(--ease),visibility .45s;
+}
+.modal.is-open{opacity:1;visibility:visible;}
+.modal__box{
+  background:var(--bg-dark-2);border:1px solid var(--gold);
+  max-width:520px;width:100%;padding:clamp(30px,5vw,52px);text-align:center;
+  transform:translateY(22px) scale(.97);transition:transform .5s var(--ease);
+}
+.modal.is-open .modal__box{transform:none;}
+.modal__check{
+  width:62px;height:62px;border:1px solid var(--gold);border-radius:50%;
+  display:grid;place-items:center;margin:0 auto 22px;color:var(--gold);font-size:22px;
+}
+.modal__box h3{font-family:var(--font-display);font-size:15px;letter-spacing:.22em;text-transform:uppercase;margin:0 0 6px;}
+.modal__box .script{font-size:2.6rem;margin-bottom:4px;}
+.modal__summary{
+  text-align:left;margin:26px 0;padding:22px;border:1px solid rgba(201,162,75,.22);
+  display:grid;gap:11px;
+}
+.modal__summary div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font-size:16px;}
+.modal__summary dt{font-family:var(--font-display);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);}
+.modal__summary dd{margin:0;color:var(--cream);text-align:right;}
+.modal__box p{font-size:16px;color:var(--cream-dim);font-style:italic;}
+
+/* ============================================================
+   RESPONSYWNOŚĆ
+   ============================================================ */
+@media (max-width:980px){
+  .discover__grid,.hours__grid,.contact__grid{grid-template-columns:1fr;}
+  .menu__list{grid-template-columns:1fr;gap:0;}
+  /* przy jednej kolumnie drugi nagłówek rozmiarów jest zbędny */
+  .menu__sizes--dup{display:none;}
+  .gallery__grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px;}
+  .hours__photo{order:-1;}
+}
+@media (max-width:820px){
+  body{font-size:18px;}
+  /* Menu mobilne — panel wysuwany z prawej */
+  /* z-index trzyma przycisk zamykania nad wysuniętym panelem */
+  .nav__burger{display:block;position:relative;z-index:5;margin-right:-10px;}
+  /* Wrapper <nav> ma zerową szerokość (lista jest position:fixed), ale jako
+     trzeci element flex przy space-between spychał hamburger na środek.
+     Wyjęcie go z układu zostawia brand po lewej i hamburger przy prawej krawędzi. */
+  .nav__inner > nav{position:absolute;}
+  .nav__links{
+    position:fixed;inset:0 0 0 auto;width:min(320px,84vw);
+    flex-direction:column;justify-content:center;gap:30px;
+    background:var(--bg-dark-3);
+    border-left:1px solid rgba(201,162,75,.22);
+    transform:translateX(100%);transition:transform .5s var(--ease);
+    padding:80px 34px;
+  }
+  .nav__links.is-open{transform:none;}
+  .nav__links a{font-size:13px;}
+  .nav__links .nav__cta{padding:14px 26px;}
+  .form__grid{grid-template-columns:1fr;}
+  .booking__aside{grid-template-columns:1fr;}
+  .discover__photos .tall img{height:260px;}
+  .discover__photos .short img{height:123px;}
+}
+@media (max-width:520px){
+  .hero__name{letter-spacing:.1em;}
+  .gallery__grid{grid-template-columns:1fr;grid-auto-rows:220px;}
+  .g-wide,.g-tall{grid-column:auto;grid-row:auto;}
+  .booking__wrap{padding:24px 18px;}
+  .modal__summary div{flex-direction:column;gap:2px;}
+  .modal__summary dd{text-align:left;}
+}
+
+/* Poszanowanie ustawień systemowych — ograniczenie ruchu */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;}
+  html{scroll-behavior:auto;}
+  .reveal{opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Przejdź do treści</a>
+
+<!-- ============================================================
+     NAWIGACJA
+     ============================================================ -->
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#hero" class="nav__brand" aria-label="Pizzeria Fiori — strona główna">
+      <span class="nav__brand-name">Fiori</span>
+      <span class="nav__brand-sub">Cucina Italiana</span>
+    </a>
+
+    <button class="nav__burger" id="burger" aria-label="Otwórz menu" aria-expanded="false" aria-controls="nav-links">
+      <i class="fa-solid fa-bars" aria-hidden="true"></i>
+    </button>
+
+    <nav aria-label="Menu główne">
+      <ul class="nav__links" id="nav-links">
+        <li><a href="#hero">Witaj</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#galeria">Galeria</a></li>
+        <li><a href="#godziny">Godziny</a></li>
+        <li><a href="#kontakt">Kontakt</a></li>
+        <li><a href="#rezerwacja" class="nav__cta">Rezerwacje</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================================================
+     HERO — karuzela 3 zdjęć
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero__slides" id="heroSlides" aria-hidden="true">
+    <!-- Zdjęcia własne restauracji, pobrane z profilu na Facebooku (folder img/) -->
+    <div class="hero__slide is-active" style="background-image:url('img/fb-1113461553907317.jpg')"></div>
+    <div class="hero__slide" style="background-image:url('img/fb-1516532806933521.jpg')"></div>
+    <div class="hero__slide" style="background-image:url('img/fb-1529420558978079.jpg')"></div>
+  </div>
+  <div class="hero__overlay"></div>
+
+  <div class="hero__content">
+    <p class="hero__welcome">Witaj</p>
+    <h1 class="hero__name">Pizzeria Fiori</h1>
+    <div class="divider"><i aria-hidden="true"></i></div>
+    <p class="hero__sub">Zarezerwuj swój stolik</p>
+    <a href="#rezerwacja" class="btn">Rezerwacja online</a>
+    <p class="hero__meta">ul. 1 Sierpnia 14 &nbsp;<span>&middot;</span>&nbsp; Stalowa Wola &nbsp;<span>&middot;</span>&nbsp; 4,3 <i class="fa-solid fa-star" style="font-size:9px" aria-hidden="true"></i> w Google</p>
+  </div>
+
+  <!-- Wskaźnik slajdów -->
+  <div class="hero__dots" id="heroDots" role="tablist" aria-label="Slajdy zdjęć">
+    <button class="hero__dot is-active" role="tab" aria-selected="true" aria-label="Slajd 1"></button>
+    <button class="hero__dot" role="tab" aria-selected="false" aria-label="Slajd 2"></button>
+    <button class="hero__dot" role="tab" aria-selected="false" aria-label="Slajd 3"></button>
+  </div>
+
+  <a href="#odkryj" class="hero__scroll" aria-label="Przewiń w dół"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
+</section>
+
+<!-- ============================================================
+     ODKRYJ FIORI
+     ============================================================ -->
+<section class="section light" id="odkryj">
+  <div class="container discover__grid">
+
+    <div class="discover__photos reveal">
+      <figure class="tall">
+        <img src="img/fb-1504013384852130.jpg"
+             alt="Penne w sosie śmietanowym, posypane parmezanem i świeżą bazylią" loading="lazy">
+      </figure>
+      <figure class="short">
+        <img src="img/fb-1537442788175856.jpg"
+             alt="Bruschetta z pomidorami i burattą podana na drewnianej desce" loading="lazy">
+      </figure>
+      <figure class="short">
+        <img src="img/fb-1495095525743916.jpg"
+             alt="Przystawka z tatarem, podana z pieczywem i dipami" loading="lazy">
+      </figure>
+    </div>
+
+    <div class="discover__text reveal reveal-delay-1">
+      <p class="section-label">O nas</p>
+      <p class="script">Odkryj Fiori</p>
+      <h2>Cucina Italiana w Stalowej Woli</h2>
+      <div class="divider"><i aria-hidden="true"></i></div>
+      <p>
+        Fiori to miejsce, w którym włoska prostota spotyka się z gościnnością Stalowej Woli.
+        Trzydzieści trzy pizze — od klasycznej Margherity po Mortadellę e Pistacchio
+        z burattą i zielonym pesto — wychodzą z pieca z chrupiącym, lekko przypieczonym rantem.
+      </p>
+      <p>
+        Pracujemy na składnikach, które mówią same za siebie: prosciutto di Parma, guanciale,
+        buratta, gorgonzola, świeże pomidory. Stąd Tagliatelle ai Gamberi z krewetkami i chili,
+        Pasta Toscana z polędwiczką i szpinakiem czy sałatka Pera Italiana z gruszką i orzechami.
+      </p>
+      <p>
+        Latem zapraszamy do ogródka, a najmłodsi goście mają u nas własny plac zabaw.
+        Ponad dwa tysiące opinii w Google i ocena 4,3 — dziękujemy, że z nami jesteście.
+      </p>
+
+      <div class="discover__stats">
+        <div class="discover__stat"><b>4,3<span style="font-size:15px">/5</span></b><span>Ocena w Google</span></div>
+        <div class="discover__stat"><b>2073</b><span>Opinii gości</span></div>
+        <div class="discover__stat"><b>33</b><span>Rodzaje pizzy</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     MENU
+     ============================================================ -->
+<section class="section menu" id="menu">
+  <div class="container">
+
+    <div class="section-head reveal">
+      <p class="section-label">Nasza kuchnia</p>
+      <p class="script">Menu</p>
+      <h2>Smaki Italii</h2>
+      <div class="divider"><i aria-hidden="true"></i></div>
+    </div>
+
+    <!-- Zakładki kategorii -->
+    <div class="menu__tabs reveal" role="tablist" aria-label="Kategorie menu">
+      <button class="menu__tab" role="tab" id="tab-pizza"      aria-controls="panel-pizza"      aria-selected="true">Pizza</button>
+      <button class="menu__tab" role="tab" id="tab-pasta"      aria-controls="panel-pasta"      aria-selected="false">Pasta</button>
+      <button class="menu__tab" role="tab" id="tab-salatki"    aria-controls="panel-salatki"    aria-selected="false">Sałatki</button>
+      <button class="menu__tab" role="tab" id="tab-przekaski"  aria-controls="panel-przekaski"  aria-selected="false">Przystawki / Zupy</button>
+      <button class="menu__tab" role="tab" id="tab-desery"     aria-controls="panel-desery"     aria-selected="false">Desery</button>
+      <button class="menu__tab" role="tab" id="tab-napoje"     aria-controls="panel-napoje"     aria-selected="false">Napoje</button>
+      <button class="menu__tab" role="tab" id="tab-piwo"       aria-controls="panel-piwo"       aria-selected="false">Piwo / Drinki</button>
+      <button class="menu__tab" role="tab" id="tab-alkohole"   aria-controls="panel-alkohole"   aria-selected="false">Alkohole</button>
+    </div>
+
+    <!-- PIZZA -->
+    <div class="menu__panel" id="panel-pizza" role="tabpanel" aria-labelledby="tab-pizza" tabindex="0">
+      <div class="menu__list">
+        <!-- Nagłówek rozmiarów — dwa razy, po jednym nad każdą kolumną siatki -->
+        <div class="menu__sizes"><span></span><span class="price2"><b>32 cm</b><b>42 cm</b></span></div>
+        <div class="menu__sizes menu__sizes--dup" aria-hidden="true"><span></span><span class="price2"><b>32 cm</b><b>42 cm</b></span></div>
+
+        <article class="menu__item">
+          <h3><span class="menu__num">1.</span>Fiori<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>36,00</b><b>48,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami, boczek, papryka jalapeño</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">2.</span>Margherita</h3>
+          <span class="menu__price price2"><b>26,00</b><b>36,00</b></span>
+          <p class="menu__desc">Sos, mozzarella</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">3.</span>Venezja</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, boczek, szynka, pieczarki, cebula</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">4.</span>Boscaiola</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami, pieczarki, czosnek</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">5.</span>Margarita di Bufala</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, pomidorki koktajlowe, buratta, bazylia, oliwa</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">6.</span>Capricciosa</h3>
+          <span class="menu__price price2"><b>36,00</b><b>46,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, pieczarki</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">7.</span>San Daniele</h3>
+          <span class="menu__price price2"><b>39,00</b><b>53,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, prosciutto Parma, parmezan, rukola</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">8.</span>Capricciosa Extra</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, pieczarki, karczochy, oliwki</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">9.</span>Hawaii</h3>
+          <span class="menu__price price2"><b>36,00</b><b>46,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, ananas</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">10.</span>Vegetariana</h3>
+          <span class="menu__price price2"><b>36,00</b><b>48,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, pieczarki, oliwki, papryka, kukurydza</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">11.</span>Mortadella e Pistacchio</h3>
+          <span class="menu__price price2"><b>36,00</b><b>48,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, pesto zielone, mortadella, buratta, pistacje</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">12.</span>Salame</h3>
+          <span class="menu__price price2"><b>36,00</b><b>48,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">13.</span>Al Tonno</h3>
+          <span class="menu__price price2"><b>36,00</b><b>48,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, tuńczyk, oliwki, cebula, czosnek</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">14.</span>Quattro Formaggi</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, cztery rodzaje sera</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">15.</span>Arrabbiatta<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, pancetta, czosnek, czerwona cebula, płatki chili</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">16.</span>Pesto Rosso</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, pancetta, pesto rosso, mascarpone, bazylia, migdały</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">17.</span>Giuseppe</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, tuńczyk, pieczarki, oliwki, cebula, czosnek</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">18.</span>Salsiccia Piccante<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salsiccia piccante, mascarpone, pikantny miód, bazylia</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">19.</span>Capri</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, salami, pieczarki, papryka, kukurydza, cebula</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">20.</span>Al Padrino<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>39,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, szynka, boczek, salami, pieczarki, oliwki, czosnek, papryka chilli</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">21.</span>Sceriffo</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami, pieczarki, suszone pomidory, mascarpone</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">22.</span>Al Pollo</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, kurczak, pieczarki, papryka, kukurydza</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">23.</span>Diavola Dolce<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salsiccia picante, pancetta, dżem z figi, rukola</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">24.</span>Kasia<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami, cebula, czosnek, papryka chilli</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">25.</span>Hero</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Sos, salami, trzy rodzaje sera</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">26.</span>Amigo</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, kurczak, szynka, salami, boczek, pieczarki, cebula</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">27.</span>Roma</h3>
+          <span class="menu__price price2"><b>37,00</b><b>49,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, kurczak, feta, oliwki, rukola</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">28.</span>Calabresse Bianca<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Serek kremowy, mozzarella, pikantna salsiccia, pancetta, ziemniaki</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">29.</span>Da Massimiliano</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Mozzarella, mascarpone, szynka, oliwki zielone, jalapeño, pesto, rukola</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">30.</span>Carbonara</h3>
+          <span class="menu__price price2"><b>38,00</b><b>52,00</b></span>
+          <p class="menu__desc">Mozzarella, boczek, pieczarki, mascarpone, parmezan</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">31.</span>Salame Piccante<i class="fa-solid fa-pepper-hot menu__hot" role="img" aria-label="pikantna"></i></h3>
+          <span class="menu__price price2"><b>37,00</b><b>51,00</b></span>
+          <p class="menu__desc">Sos, mozzarella, salami pikantne, bazylia</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">32.</span>Marinara</h3>
+          <span class="menu__price price2"><b>19,00</b><b>29,00</b></span>
+          <p class="menu__desc">Sos pomidorowy, oliwa, czosnek</p>
+        </article>
+        <article class="menu__item">
+          <h3><span class="menu__num">33.</span>Pera</h3>
+          <span class="menu__price price2"><b>37,00</b><b>51,00</b></span>
+          <p class="menu__desc">Mozzarella, gruszka, gorgonzola, mascarpone, orzechy włoskie, rukola</p>
+        </article>
+
+        <p class="menu__extra">Dodatkowy sos pomidorowy lub czosnkowy — 2,00 zł</p>
+      </div>
+    </div>
+
+    <!-- PASTA -->
+    <div class="menu__panel" id="panel-pasta" role="tabpanel" aria-labelledby="tab-pasta" tabindex="0" hidden>
+      <div class="menu__list">
+        <article class="menu__item">
+          <h3>Pasta al Pomodoro Fresco</h3><span class="menu__price">29,00 zł</span>
+          <p class="menu__desc">Sos ze świeżych pomidorów</p>
+        </article>
+        <article class="menu__item">
+          <h3>Amatriciana</h3><span class="menu__price">35,00 zł</span>
+          <p class="menu__desc">Guanciale, sos ze świeżych pomidorów</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pasta Toscana</h3><span class="menu__price">36,00 zł</span>
+          <p class="menu__desc">Boczek, polędwiczka, suszony pomidor, szpinak</p>
+        </article>
+        <article class="menu__item">
+          <h3>Spaghetti alla Carbonara</h3><span class="menu__price">34,00 zł</span>
+          <p class="menu__desc">Boczek, sos śmietanowy</p>
+        </article>
+        <article class="menu__item">
+          <h3>Tagliatelle ai Gamberi</h3><span class="menu__price">42,00 zł</span>
+          <p class="menu__desc">Krewetki, czosnek, chili, natka pietruszki</p>
+        </article>
+        <article class="menu__item">
+          <h3>Tagliatelle con Burata</h3><span class="menu__price">39,00 zł</span>
+          <p class="menu__desc">Burrata, pistacje, pesto, skórka z cytryny</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pasta con Pollo e Spinaci</h3><span class="menu__price">36,00 zł</span>
+          <p class="menu__desc">Kurczak, świeży szpinak, sos śmietanowy</p>
+        </article>
+
+        <p class="menu__extra">Każdą pastę można zamówić w wersji z makaronem razowym.</p>
+      </div>
+    </div>
+
+    <!-- SAŁATKI -->
+    <div class="menu__panel" id="panel-salatki" role="tabpanel" aria-labelledby="tab-salatki" tabindex="0" hidden>
+      <div class="menu__list">
+        <article class="menu__item">
+          <h3>Szefa z kurczakiem</h3><span class="menu__price">32,00 zł</span>
+          <p class="menu__desc">Sałata lodowa, pomidor cherry, ogórek, papryka, czerwona cebula, feta, oliwki</p>
+        </article>
+        <article class="menu__item">
+          <h3>Fiori<span class="menu__badge">Firmowa</span></h3><span class="menu__price">33,00 zł</span>
+          <p class="menu__desc">Polędwiczka wieprzowa, sałata, ogórek kiszony, sos balsamiczny oraz lekko pikantna salsa pomidorowa</p>
+        </article>
+        <article class="menu__item">
+          <h3>Vera Avocado</h3><span class="menu__price">32,00 zł</span>
+          <p class="menu__desc">Mix sałat z rukolą, suszony pomidor, avocado, słonecznik</p>
+        </article>
+        <article class="menu__item">
+          <h3>Cesar</h3><span class="menu__price">34,00 zł</span>
+          <p class="menu__desc">Sałata lodowa, chrupiący boczek, parmezan, grzanki, sos cesar</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pera Italiana</h3><span class="menu__price">34,00 zł</span>
+          <p class="menu__desc">Rukola, prosciutto crudo, gruszka, gorgonzola, orzechy, oliwki</p>
+        </article>
+        <article class="menu__item">
+          <h3>Sałatka z czerwonego buraka</h3><span class="menu__price">33,00 zł</span>
+          <p class="menu__desc">Burak, rukola, orzechy, granat, feta</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- PRZYSTAWKI / ZUPY -->
+    <div class="menu__panel" id="panel-przekaski" role="tabpanel" aria-labelledby="tab-przekaski" tabindex="0" hidden>
+      <div class="menu__list">
+        <h3 class="menu__sub">Przystawki</h3>
+        <article class="menu__item">
+          <h3>Bruschetta Tomate</h3><span class="menu__price">22,00 zł</span>
+          <p class="menu__desc">Pieczona w piecu z oliwą, podana z pomidorami, burattą i bazylią</p>
+        </article>
+        <article class="menu__item">
+          <h3>Bruschetta Salame</h3><span class="menu__price">22,00 zł</span>
+          <p class="menu__desc">Zapiekana z salami piccante, karczochem i gorgonzolą</p>
+        </article>
+        <article class="menu__item">
+          <h3>Grissini Fiori</h3><span class="menu__price">22,00 zł</span>
+          <p class="menu__desc">Firmowe paluchy pikantne</p>
+        </article>
+        <article class="menu__item">
+          <h3>Krewetki królewskie</h3><span class="menu__price">38,00 zł</span>
+          <p class="menu__desc">Sos winno-maślany, pomidorki koktajlowe, czosnek, chili, grzanki</p>
+        </article>
+        <article class="menu__item">
+          <h3>Antipasto</h3><span class="menu__price">28,00 zł</span>
+          <p class="menu__desc">Deska serów i wędlin</p>
+        </article>
+
+        <h3 class="menu__sub">Zupy</h3>
+        <article class="menu__item">
+          <h3>Zupa cebulowa</h3><span class="menu__price">16,00 zł</span>
+          <p class="menu__desc">Z grzanką serową</p>
+        </article>
+        <article class="menu__item">
+          <h3>Zupa krem z cukinii</h3><span class="menu__price">16,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- DESERY -->
+    <div class="menu__panel" id="panel-desery" role="tabpanel" aria-labelledby="tab-desery" tabindex="0" hidden>
+      <div class="menu__list">
+        <article class="menu__item">
+          <h3>Pucharek lodowy</h3><span class="menu__price">17,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Szarlotka na ciepło z lodami</h3><span class="menu__price">18,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Tiramisu</h3><span class="menu__price">19,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Brownie z lodami</h3><span class="menu__price">19,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- NAPOJE -->
+    <div class="menu__panel" id="panel-napoje" role="tabpanel" aria-labelledby="tab-napoje" tabindex="0" hidden>
+      <div class="menu__list">
+        <h3 class="menu__sub">Herbata</h3>
+        <article class="menu__item">
+          <h3>Herbata czarna</h3><span class="menu__price">9,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Herbata Earl Grey</h3><span class="menu__price">9,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Herbata zielona</h3><span class="menu__price">9,00 zł</span>
+          <p class="menu__desc">Klasyczna, jaśminowa, miętowa</p>
+        </article>
+        <article class="menu__item">
+          <h3>Herbata owocowa</h3><span class="menu__price">9,00 zł</span>
+          <p class="menu__desc">Malina, brzoskwinia, cytryna, czarna porzeczka, jabłko, mango, truskawka</p>
+        </article>
+        <article class="menu__item">
+          <h3>Herbata z rumem</h3><span class="menu__price">14,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Herbata zimowa rozgrzewająca</h3><span class="menu__price">17,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Kawa</h3>
+        <article class="menu__item">
+          <h3>Espresso</h3><span class="menu__price">10,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Cappucino</h3><span class="menu__price">12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Caffe Latte</h3><span class="menu__price">12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Kawa parzona / rozpuszczalna</h3><span class="menu__price">10,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Caffe Frappe</h3><span class="menu__price">18,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Napoje zimne</h3>
+        <article class="menu__item">
+          <h3>Pepsi</h3><span class="menu__price"><span class="menu__vol">200 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>7 Up</h3><span class="menu__price"><span class="menu__vol">200 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Mirinda</h3><span class="menu__price"><span class="menu__vol">200 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Schweppes</h3><span class="menu__price"><span class="menu__vol">200 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Lipton Ice Tea</h3><span class="menu__price"><span class="menu__vol">200 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Woda mineralna</h3><span class="menu__price"><span class="menu__vol">300 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Energy drink</h3><span class="menu__price"><span class="menu__vol">250 ml</span>8,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pepsi</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>7 Up</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Mirinda</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pepsi</h3><span class="menu__price"><span class="menu__vol">0,85 l</span>16,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Sok</h3><span class="menu__price"><span class="menu__vol">300 ml</span>8,00 zł</span>
+          <p class="menu__desc">Banan, czarna porzeczka, grejpfrut, jabłko, pomarańcza, pomidor, limonka, żurawina</p>
+        </article>
+        <article class="menu__item">
+          <h3>Sok — karafka</h3><span class="menu__price"><span class="menu__vol">1 l</span>19,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Woda — karafka</h3><span class="menu__price"><span class="menu__vol">1 l</span>15,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Lemoniada</h3><span class="menu__price"><span class="menu__vol">0,4 l</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Lemoniada</h3><span class="menu__price"><span class="menu__vol">1 l</span>25,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- PIWO / DRINKI -->
+    <div class="menu__panel" id="panel-piwo" role="tabpanel" aria-labelledby="tab-piwo" tabindex="0" hidden>
+      <div class="menu__list">
+        <h3 class="menu__sub">Piwo beczkowe</h3>
+        <article class="menu__item">
+          <h3>Żywiec</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>11,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Żywiec</h3><span class="menu__price"><span class="menu__vol">0,3 l</span>7,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Sok do piwa</h3><span class="menu__price">2,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Piwo grzane</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>18,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Wino grzane</h3><span class="menu__price"><span class="menu__vol">0,2 l</span>16,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Piwo butelkowe</h3>
+        <article class="menu__item">
+          <h3>Żywiec</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Żywiec bezalkoholowy</h3><span class="menu__price"><span class="menu__vol">0,3 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Żywiec Porter, Białe, IPA, APA</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>15,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Namysłów</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Warka</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Warka Strong</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Warka Radler</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Leżajsk</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Heineken</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Heineken bezalkoholowy</h3><span class="menu__price"><span class="menu__vol">0,5 l</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Desperados</h3><span class="menu__price"><span class="menu__vol">0,4 l</span>15,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Redd's</h3><span class="menu__price"><span class="menu__vol">0,4 l</span>13,00 zł</span>
+          <p class="menu__desc">Jabłkowy, malinowy, żurawinowy</p>
+        </article>
+
+        <p class="menu__extra">Piwo rzemieślnicze — o aktualną ofertę zapytaj obsługę.</p>
+
+        <h3 class="menu__sub">Drinki</h3>
+        <article class="menu__item">
+          <h3>Wściekły pies</h3><span class="menu__price">12,00 zł</span>
+          <p class="menu__desc">Wódka, syrop malina, tabasco</p>
+        </article>
+        <article class="menu__item">
+          <h3>Słodka szarlotka</h3><span class="menu__price">18,00 zł</span>
+          <p class="menu__desc">Żubrówka, sok jabłkowy</p>
+        </article>
+        <article class="menu__item">
+          <h3>Gin &amp; Tonic</h3><span class="menu__price">21,00 zł</span>
+          <p class="menu__desc">Gin, tonik, cytryna</p>
+        </article>
+        <article class="menu__item">
+          <h3>Aperol</h3><span class="menu__price">27,00 zł</span>
+          <p class="menu__desc">Aperol, proseco, pomarańcza</p>
+        </article>
+        <article class="menu__item">
+          <h3>Pina Colada</h3><span class="menu__price">23,00 zł</span>
+          <p class="menu__desc">Malibu, sok ananasowy, sok pomarańczowy</p>
+        </article>
+        <article class="menu__item">
+          <h3>Ludwik XII</h3><span class="menu__price">21,00 zł</span>
+          <p class="menu__desc">Wódka, Blue Curacao, sok ananasowy, sok pomarańczowy</p>
+        </article>
+        <article class="menu__item">
+          <h3>Mojito</h3><span class="menu__price">24,00 zł</span>
+          <p class="menu__desc">Rum, sok z limonki, cukier trzcinowy, mięta</p>
+        </article>
+        <article class="menu__item">
+          <h3>Mojito bezalkoholowe</h3><span class="menu__price">17,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Mojito truskawkowe</h3><span class="menu__price">24,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Tequila Sunrise</h3><span class="menu__price">23,00 zł</span>
+          <p class="menu__desc">Tequila, grenadina, sok pomarańczowy</p>
+        </article>
+        <article class="menu__item">
+          <h3>Sex on the Beach</h3><span class="menu__price">25,00 zł</span>
+          <p class="menu__desc">Wódka, likier brzoskwiniowy, Passoa, sok żurawina</p>
+        </article>
+        <article class="menu__item">
+          <h3>Fresh</h3><span class="menu__price">25,00 zł</span>
+          <p class="menu__desc">Wódka, Martini Bianco, 7up, cytryna, mięta</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- ALKOHOLE -->
+    <div class="menu__panel" id="panel-alkohole" role="tabpanel" aria-labelledby="tab-alkohole" tabindex="0" hidden>
+      <div class="menu__list">
+        <h3 class="menu__sub">Wódka</h3>
+        <article class="menu__item">
+          <h3>Finlandia</h3><span class="menu__price price2"><b>11,00</b><b>99,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Bols</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Krupnik</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Wyborowa</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Żołądkowa Gorzka</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Wiśniówka</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+        <article class="menu__item">
+          <h3>Żubrówka</h3><span class="menu__price price2"><b>9,00</b><b>80,00</b></span>
+          <p class="menu__desc">50 ml / butelka 0,5 l</p>
+        </article>
+
+        <h3 class="menu__sub">Whisky</h3>
+        <article class="menu__item">
+          <h3>Tullamore Dew</h3><span class="menu__price"><span class="menu__vol">50 ml</span>13,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Jack Daniel's</h3><span class="menu__price"><span class="menu__vol">50 ml</span>15,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Gin, koniak, tequila</h3>
+        <article class="menu__item">
+          <h3>Lubuski</h3><span class="menu__price"><span class="menu__vol">50 ml</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Koniak Metaxa *****</h3><span class="menu__price"><span class="menu__vol">50 ml</span>14,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Tequila Jose Cuervo</h3><span class="menu__price"><span class="menu__vol">50 ml</span>14,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Rum</h3>
+        <article class="menu__item">
+          <h3>Captain Morgan</h3><span class="menu__price"><span class="menu__vol">50 ml</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Malibu</h3><span class="menu__price"><span class="menu__vol">50 ml</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+        <article class="menu__item">
+          <h3>Bacardi Superior</h3><span class="menu__price"><span class="menu__vol">50 ml</span>12,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+
+        <h3 class="menu__sub">Likier</h3>
+        <article class="menu__item">
+          <h3>Jägermeister</h3><span class="menu__price"><span class="menu__vol">50 ml</span>15,00 zł</span>
+          <p class="menu__desc">&nbsp;</p>
+        </article>
+      </div>
+    </div>
+
+    <p class="menu__note">
+      Menu i ceny zgodne z aktualną kartą lokalu. Ceny w złotych, zawierają podatek VAT.
+      W sprawie alergenów prosimy o kontakt z obsługą.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     GALERIA
+     ============================================================ -->
+<section class="section gallery" id="galeria">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="section-label">Atmosfera</p>
+      <p class="script">Galeria</p>
+      <h2>Zajrzyj do środka</h2>
+      <div class="divider"><i aria-hidden="true"></i></div>
+    </div>
+
+    <div class="gallery__grid reveal">
+      <figure class="g-wide g-tall">
+        <img src="img/fb-1524425946144207.jpg"
+             alt="Dwie porcje makaronu z parmezanem i bazylią obok firmowych kart menu Fiori" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1516532806933521.jpg"
+             alt="Pizza z szynką i zielonym pesto na drewnianej desce" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1498357488751053.jpg"
+             alt="Dwie miski zupy krem podane z pieczywem na tle sali restauracji" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1537442788175856.jpg"
+             alt="Bruschetta z pomidorami i burattą na drewnianej desce" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1495095525743916.jpg"
+             alt="Przystawka z tatarem, podana z pieczywem i dipami" loading="lazy">
+      </figure>
+      <figure class="g-wide">
+        <img src="img/fb-1113461553907317.jpg"
+             alt="Metalowe litery FIORI stojące na barze w sali restauracji" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1504013384852130.jpg"
+             alt="Penne w sosie śmietanowym z parmezanem i bazylią" loading="lazy">
+      </figure>
+      <figure>
+        <img src="img/fb-1529420558978079.jpg"
+             alt="Ogródek restauracji — deser i mrożona kawa na stoliku" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     REZERWACJA STOLIKA
+     ============================================================ -->
+<section class="section booking" id="rezerwacja">
+  <div class="booking__bg" style="background-image:url('img/fb-1524425946144207.jpg')" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="section-label">Zapraszamy</p>
+      <p class="script">Rezerwacja</p>
+      <h2>Zarezerwuj stolik</h2>
+      <div class="divider"><i aria-hidden="true"></i></div>
+    </div>
+
+    <div class="booking__wrap reveal reveal-delay-1">
+      <!-- novalidate: pełną walidację prowadzimy w JS, aby ujednolicić komunikaty -->
+      <form id="bookingForm" novalidate>
+        <div class="form__grid">
+
+          <div class="field">
+            <label for="bk-name">Imię i nazwisko <span class="req" aria-hidden="true">*</span></label>
+            <input type="text" id="bk-name" name="name" autocomplete="name"
+                   placeholder="np. Anna Kowalska" required aria-describedby="err-name">
+            <span class="field__error" id="err-name" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="bk-phone">Telefon <span class="req" aria-hidden="true">*</span></label>
+            <input type="tel" id="bk-phone" name="phone" autocomplete="tel"
+                   placeholder="np. 577 931 455" required aria-describedby="err-phone">
+            <span class="field__error" id="err-phone" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="bk-email">E-mail <span class="req" aria-hidden="true">*</span></label>
+            <input type="email" id="bk-email" name="email" autocomplete="email"
+                   placeholder="np. anna@example.com" required aria-describedby="err-email">
+            <span class="field__error" id="err-email" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="bk-guests">Liczba osób <span class="req" aria-hidden="true">*</span></label>
+            <select id="bk-guests" name="guests" required aria-describedby="err-guests">
+              <option value="">— wybierz —</option>
+              <option>1</option><option selected>2</option><option>3</option><option>4</option>
+              <option>5</option><option>6</option><option>7</option><option>8</option>
+              <option value="9">9 i więcej</option>
+            </select>
+            <span class="field__error" id="err-guests" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="bk-date">Data <span class="req" aria-hidden="true">*</span></label>
+            <input type="date" id="bk-date" name="date" required aria-describedby="err-date">
+            <span class="field__error" id="err-date" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="bk-time">Godzina <span class="req" aria-hidden="true">*</span></label>
+            <select id="bk-time" name="time" required aria-describedby="err-time">
+              <option value="">— najpierw wybierz datę —</option>
+            </select>
+            <span class="field__error" id="err-time" role="alert"></span>
+          </div>
+
+          <div class="field field--full">
+            <label for="bk-notes">Uwagi (opcjonalnie)</label>
+            <textarea id="bk-notes" name="notes" maxlength="400"
+                      placeholder="Stolik przy oknie, urodziny, fotelik dla dziecka, alergie…"></textarea>
+            <p class="field__hint" id="notes-counter">Pozostało 400 znaków</p>
+          </div>
+
+        </div>
+
+        <div class="form__footer">
+          <p class="note">
+            Rezerwację potwierdzamy telefonicznie. Stolik utrzymujemy 15 minut od wybranej godziny.
+          </p>
+          <button type="submit" class="btn btn--solid">Rezerwuję stolik</button>
+        </div>
+      </form>
+
+      <div class="booking__aside">
+        <div>
+          <i class="fa-solid fa-phone" aria-hidden="true"></i>
+          <b>Rezerwacja telefoniczna</b>
+          <span>15 642 72 75 &middot; 577 931 455</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-clock" aria-hidden="true"></i>
+          <b>Ostatni stolik</b>
+          <span>Godzinę przed zamknięciem</span>
+        </div>
+        <div>
+          <i class="fa-solid fa-users" aria-hidden="true"></i>
+          <b>Grupy powyżej 8 osób</b>
+          <span>Prosimy o kontakt telefoniczny</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     GODZINY OTWARCIA
+     ============================================================ -->
+<section class="section hours" id="godziny">
+  <div class="container hours__grid">
+
+    <div class="reveal">
+      <p class="section-label">Kiedy zapraszamy</p>
+      <p class="script">Godziny otwarcia</p>
+      <div class="divider"><i aria-hidden="true"></i></div>
+
+      <table id="hoursTable">
+        <caption class="sr-only" style="position:absolute;left:-9999px;">Godziny otwarcia Pizzerii Fiori</caption>
+        <thead>
+          <tr><th scope="col">Dzień</th><th scope="col">Godziny</th></tr>
+        </thead>
+        <tbody>
+          <tr data-day="1"><td>Poniedziałek</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="2"><td>Wtorek</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="3"><td>Środa</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="4"><td>Czwartek</td><td>12:00 – 22:00</td></tr>
+          <tr data-day="5"><td>Piątek</td><td>12:00 – 23:00</td></tr>
+          <tr data-day="6"><td>Sobota</td><td>12:00 – 23:00</td></tr>
+          <tr data-day="0"><td>Niedziela</td><td>12:00 – 22:00</td></tr>
+        </tbody>
+      </table>
+      <p class="field__hint" style="color:var(--ink-dim);margin-top:18px;">
+        Godziny podane orientacyjnie — przed wizytą prosimy o kontakt telefoniczny.
+      </p>
+    </div>
+
+    <figure class="hours__photo reveal reveal-delay-1" style="margin:0;">
+      <img src="img/fb-1529420558978079.jpg"
+           alt="Ogródek restauracji ze stolikami, przygotowany dla gości" loading="lazy">
+    </figure>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     KONTAKT + MAPA
+     ============================================================ -->
+<section class="section contact" id="kontakt">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="section-label">Znajdź nas</p>
+      <p class="script">Kontakt</p>
+      <h2>Stalowa Wola</h2>
+      <div class="divider"><i aria-hidden="true"></i></div>
+    </div>
+
+    <div class="contact__grid">
+      <div class="reveal">
+        <ul class="contact__list">
+          <li>
+            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+            <div><b>Adres</b>ul. 1 Sierpnia 14<br>37-450 Stalowa Wola</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-phone" aria-hidden="true"></i>
+            <div><b>Telefon</b>
+              <a href="tel:+48156427275">15 642 72 75</a><br>
+              <a href="tel:+48577931455">577 931 455</a>
+            </div>
+          </li>
+          <li>
+            <i class="fa-solid fa-globe" aria-hidden="true"></i>
+            <div><b>Strona</b><a href="https://pizzeriafiori.pl" target="_blank" rel="noopener">pizzeriafiori.pl</a></div>
+          </li>
+          <li>
+            <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+            <div><b>Kuchnia</b>Włoska &middot; Pizza</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            <div><b>Ocena gości</b>4,3 / 5 &mdash; na podstawie 2073 opinii w Google</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-child-reaching" aria-hidden="true"></i>
+            <div><b>Udogodnienia</b>Ogródek letni &middot; Plac zabaw &middot; Dostawa</div>
+          </li>
+          <li>
+            <i class="fa-solid fa-wheelchair" aria-hidden="true"></i>
+            <div><b>Dostępność</b>Lokal przystosowany dla osób poruszających się na wózku</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="contact__map reveal reveal-delay-1">
+        <iframe
+          title="Mapa — Pizzeria Fiori, ul. 1 Sierpnia 14, Stalowa Wola"
+          src="https://www.google.com/maps?q=50.5696,22.0540&hl=pl&z=17&output=embed"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================
+     STOPKA
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <p class="footer__name">Fiori</p>
+    <p class="footer__tag">Dziękujemy, że z nami jesteście</p>
+    <p class="footer__meta" style="margin-top:6px;">Zespół Fiori</p>
+
+    <ul class="footer__social">
+      <li><a href="https://www.facebook.com/profile.php?id=100057304485820" target="_blank" rel="noopener" aria-label="Pizzeria Fiori na Facebooku"><i class="fa-brands fa-facebook-f" aria-hidden="true"></i></a></li>
+      <li><a href="https://www.instagram.com/pizzeriafiori.stw/" target="_blank" rel="noopener" aria-label="Pizzeria Fiori na Instagramie"><i class="fa-brands fa-instagram" aria-hidden="true"></i></a></li>
+      <li><a href="tel:+48156427275" aria-label="Zadzwoń do nas"><i class="fa-solid fa-phone" aria-hidden="true"></i></a></li>
+    </ul>
+
+    <p class="footer__meta">ul. 1 Sierpnia 14, 37-450 Stalowa Wola &nbsp;&middot;&nbsp; 15 642 72 75</p>
+    <p class="footer__meta">&copy; <span id="year"></span> Pizzeria Fiori. Wszelkie prawa zastrzeżone.</p>
+
+    <p class="footer__disclaimer">
+      Strona demonstracyjna — makieta koncepcyjna przygotowana wyłącznie do prezentacji.
+      Menu, ceny, dane kontaktowe i ocena pochodzą z materiałów restauracji oraz wizytówki Google.
+      Zdjęcia pochodzą z profilu restauracji na Facebooku i są użyte wyłącznie na potrzeby
+      prezentacji koncepcji — przed publikacją wymagają zgody właściciela.
+      Formularz rezerwacji nie wysyła danych — działa wyłącznie po stronie przeglądarki.
+    </p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MODAL POTWIERDZENIA
+     ============================================================ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal__box">
+    <div class="modal__check"><i class="fa-solid fa-check" aria-hidden="true"></i></div>
+    <p class="script">Dziękujemy!</p>
+    <h3 id="modalTitle">Rezerwacja przyjęta</h3>
+    <div class="divider"><i aria-hidden="true"></i></div>
+
+    <dl class="modal__summary" id="modalSummary"></dl>
+
+    <p id="modalMsg"></p>
+    <button type="button" class="btn" id="modalClose">Zamknij</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   11. JAVASCRIPT
+   Sekcje:
+     A. Nawigacja (scroll + hamburger)
+     B. Karuzela hero
+     C. Animacje przy scrollu
+     D. Zakładki menu
+     E. Formularz rezerwacji (walidacja + potwierdzenie)
+     F. Drobiazgi (rok w stopce, podświetlenie dzisiejszego dnia)
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* --- Konfiguracja godzin otwarcia -------------------------
+     Klucz = dzień tygodnia wg Date.getDay() (0 = niedziela).
+     open/close w minutach od północy.                        */
+  var OPENING = {
+    0: { open: 12 * 60, close: 22 * 60 }, // niedziela
+    1: { open: 12 * 60, close: 22 * 60 },
+    2: { open: 12 * 60, close: 22 * 60 },
+    3: { open: 12 * 60, close: 22 * 60 },
+    4: { open: 12 * 60, close: 22 * 60 },
+    5: { open: 12 * 60, close: 23 * 60 }, // piątek
+    6: { open: 12 * 60, close: 23 * 60 }  // sobota
+  };
+  var LAST_BOOKING_OFFSET = 60; // ostatnia rezerwacja 60 min przed zamknięciem
+  var SLOT_STEP = 30;           // co ile minut generujemy godziny
+  var MAX_DAYS_AHEAD = 90;      // najdalszy możliwy termin rezerwacji
+
+  /* Symulowana "baza" rezerwacji — tylko w pamięci strony.
+     Świadomie bez localStorage/sessionStorage.               */
+  var reservations = [];
+
+  var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
+  var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
+
+  /* ==========================================================
+     A. NAWIGACJA
+     ========================================================== */
+  var nav = $('#nav');
+  var burger = $('#burger');
+  var navLinks = $('#nav-links');
+
+  function onScroll() {
+    nav.classList.toggle('is-scrolled', window.scrollY > 60);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  function closeMenu() {
+    navLinks.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Otwórz menu');
+    burger.innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+  }
+
+  burger.addEventListener('click', function () {
+    var open = navLinks.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
+    burger.innerHTML = open
+      ? '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
+  });
+
+  // Kliknięcie w link zamyka menu mobilne
+  $$('#nav-links a').forEach(function (a) {
+    a.addEventListener('click', closeMenu);
+  });
+
+  // Escape zamyka menu mobilne
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navLinks.classList.contains('is-open')) {
+      closeMenu();
+      burger.focus();
+    }
+  });
+
+  /* ==========================================================
+     B. KARUZELA HERO
+     ========================================================== */
+  var slides = $$('.hero__slide');
+  var dots = $$('.hero__dot');
+  var current = 0;
+  var timer = null;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function goToSlide(i) {
+    current = (i + slides.length) % slides.length;
+    slides.forEach(function (s, idx) { s.classList.toggle('is-active', idx === current); });
+    dots.forEach(function (d, idx) {
+      d.classList.toggle('is-active', idx === current);
+      d.setAttribute('aria-selected', String(idx === current));
+    });
+  }
+
+  function startCarousel() {
+    if (reduceMotion || slides.length < 2) return;
+    stopCarousel();
+    timer = setInterval(function () { goToSlide(current + 1); }, 6500);
+  }
+  function stopCarousel() { if (timer) { clearInterval(timer); timer = null; } }
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener('click', function () { goToSlide(i); startCarousel(); });
+  });
+
+  // Zatrzymanie karuzeli, gdy karta jest nieaktywna (oszczędność zasobów)
+  document.addEventListener('visibilitychange', function () {
+    document.hidden ? stopCarousel() : startCarousel();
+  });
+  startCarousel();
+
+  /* ==========================================================
+     C. ANIMACJE PRZY SCROLLU
+     ========================================================== */
+  var revealables = $$('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target); // animujemy tylko raz
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    revealables.forEach(function (el) { io.observe(el); });
+  } else {
+    // Fallback: pokazujemy wszystko od razu
+    revealables.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  /* ==========================================================
+     D. ZAKŁADKI MENU
+     ========================================================== */
+  var tabs = $$('.menu__tab');
+
+  function selectTab(tab) {
+    tabs.forEach(function (t) {
+      var selected = t === tab;
+      t.setAttribute('aria-selected', String(selected));
+      var panel = document.getElementById(t.getAttribute('aria-controls'));
+      if (panel) panel.hidden = !selected;
+    });
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { selectTab(tab); });
+
+    // Nawigacja strzałkami wewnątrz listy zakładek (wzorzec ARIA Tabs)
+    tab.addEventListener('keydown', function (e) {
+      var next = null;
+      if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
+      if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
+      if (next) { e.preventDefault(); selectTab(next); next.focus(); }
+    });
+  });
+
+  /* ==========================================================
+     E. FORMULARZ REZERWACJI
+     ========================================================== */
+  var form = $('#bookingForm');
+  var dateInput = $('#bk-date');
+  var timeSelect = $('#bk-time');
+  var notes = $('#bk-notes');
+  var notesCounter = $('#notes-counter');
+
+  /* --- pomocnicze --- */
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function toISO(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+
+  // Parsujemy "YYYY-MM-DD" ręcznie — new Date(str) interpretuje to jako UTC,
+  // co przy polskiej strefie potrafi przesunąć datę o jeden dzień.
+  function parseISO(str) {
+    var p = String(str).split('-');
+    if (p.length !== 3) return null;
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  function startOfToday() {
+    var t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return t;
+  }
+
+  /* --- zakres dat: od dziś do +90 dni --- */
+  var today = startOfToday();
+  var maxDate = new Date(today.getTime());
+  maxDate.setDate(maxDate.getDate() + MAX_DAYS_AHEAD);
+  dateInput.min = toISO(today);
+  dateInput.max = toISO(maxDate);
+
+  /* --- generowanie dostępnych godzin dla wybranego dnia --- */
+  function buildTimeSlots() {
+    var value = timeSelect.value;      // próbujemy zachować wybór użytkownika
+    timeSelect.innerHTML = '';
+
+    var date = parseISO(dateInput.value);
+    if (!date) {
+      timeSelect.appendChild(new Option('— najpierw wybierz datę —', ''));
+      return;
+    }
+
+    var hours = OPENING[date.getDay()];
+    if (!hours) {
+      timeSelect.appendChild(new Option('— tego dnia jest zamknięte —', ''));
+      return;
+    }
+
+    // Jeśli rezerwacja jest na dziś, odcinamy godziny, które już minęły (+1h zapasu)
+    var minMinutes = hours.open;
+    var now = new Date();
+    if (toISO(date) === toISO(startOfToday())) {
+      var nowMinutes = now.getHours() * 60 + now.getMinutes() + 60;
+      if (nowMinutes > minMinutes) {
+        // zaokrąglamy w górę do pełnego slotu
+        minMinutes = Math.ceil(nowMinutes / SLOT_STEP) * SLOT_STEP;
+      }
+    }
+
+    var lastSlot = hours.close - LAST_BOOKING_OFFSET;
+    timeSelect.appendChild(new Option('— wybierz godzinę —', ''));
+
+    var any = false;
+    for (var m = minMinutes; m <= lastSlot; m += SLOT_STEP) {
+      var label = pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+      timeSelect.appendChild(new Option(label, label));
+      any = true;
+    }
+
+    if (!any) {
+      timeSelect.innerHTML = '';
+      timeSelect.appendChild(new Option('— brak wolnych godzin tego dnia —', ''));
+      return;
+    }
+
+    // Przywracamy poprzedni wybór, jeśli nadal jest dostępny
+    if (value && $$('option', timeSelect).some(function (o) { return o.value === value; })) {
+      timeSelect.value = value;
+    }
+  }
+
+  dateInput.addEventListener('change', function () {
+    buildTimeSlots();
+    validateField(dateInput);
+  });
+  buildTimeSlots();
+
+  /* --- licznik znaków w polu uwag --- */
+  notes.addEventListener('input', function () {
+    var left = 400 - notes.value.length;
+    notesCounter.textContent = 'Pozostało ' + left + ' ' + (left === 1 ? 'znak' : (left % 10 >= 2 && left % 10 <= 4 && (left < 10 || left > 20) ? 'znaki' : 'znaków'));
+  });
+
+  /* --- reguły walidacji dla poszczególnych pól --- */
+  var validators = {
+    name: function (v) {
+      if (!v.trim()) return 'Podaj imię i nazwisko.';
+      if (v.trim().length < 3) return 'Wpisz co najmniej 3 znaki.';
+      if (!/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s'-]*$/.test(v.trim()))
+        return 'Imię i nazwisko może zawierać tylko litery.';
+      return '';
+    },
+    phone: function (v) {
+      if (!v.trim()) return 'Podaj numer telefonu.';
+      // Akceptujemy spacje, myślniki i prefiks +48; wymagamy 9 cyfr numeru krajowego
+      var digits = v.replace(/[\s()-]/g, '');
+      if (!/^(\+48)?\d{9}$/.test(digits)) return 'Podaj 9-cyfrowy numer, np. 577 931 455.';
+      return '';
+    },
+    email: function (v) {
+      if (!v.trim()) return 'Podaj adres e-mail.';
+      if (!/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(v.trim())) return 'Adres e-mail wygląda na niepoprawny.';
+      return '';
+    },
+    guests: function (v) {
+      if (!v) return 'Wybierz liczbę osób.';
+      return '';
+    },
+    date: function (v) {
+      if (!v) return 'Wybierz datę rezerwacji.';
+      var d = parseISO(v);
+      if (!d) return 'Nieprawidłowa data.';
+      if (d < startOfToday()) return 'Data nie może być z przeszłości.';
+      if (d > maxDate) return 'Rezerwujemy z wyprzedzeniem do ' + MAX_DAYS_AHEAD + ' dni.';
+      if (!OPENING[d.getDay()]) return 'Tego dnia jest zamknięte.';
+      return '';
+    },
+    time: function (v) {
+      if (!v) return 'Wybierz godzinę.';
+      var d = parseISO(dateInput.value);
+      if (!d) return 'Najpierw wybierz datę.';
+      var hours = OPENING[d.getDay()];
+      var parts = v.split(':');
+      var minutes = (+parts[0]) * 60 + (+parts[1]);
+      if (minutes < hours.open || minutes > hours.close - LAST_BOOKING_OFFSET)
+        return 'Rezerwacje przyjmujemy do godziny ' + pad(Math.floor((hours.close - LAST_BOOKING_OFFSET) / 60)) + ':00.';
+      // Godzina w przeszłości przy rezerwacji na dziś
+      var now = new Date();
+      if (toISO(d) === toISO(startOfToday()) && minutes <= now.getHours() * 60 + now.getMinutes())
+        return 'Ta godzina już minęła.';
+      return '';
+    }
+  };
+
+  function setFieldError(input, message) {
+    var wrapper = input.closest('.field');
+    var errorEl = document.getElementById('err-' + input.id.replace('bk-', ''));
+    wrapper.classList.toggle('has-error', !!message);
+    input.setAttribute('aria-invalid', message ? 'true' : 'false');
+    if (errorEl) errorEl.textContent = message;
+    return !message;
+  }
+
+  function validateField(input) {
+    var rule = validators[input.name];
+    if (!rule) return true;
+    return setFieldError(input, rule(input.value));
+  }
+
+  // Walidacja na bieżąco — dopiero po pierwszej próbie wysyłki,
+  // żeby nie zasypywać użytkownika błędami podczas wypełniania.
+  var submitted = false;
+  $$('#bookingForm input, #bookingForm select').forEach(function (input) {
+    input.addEventListener('blur', function () { if (submitted) validateField(input); });
+    input.addEventListener('input', function () { if (submitted) validateField(input); });
+    input.addEventListener('change', function () { if (submitted) validateField(input); });
+  });
+
+  /* --- obsługa wysyłki --- */
+  var GUEST_LABEL = function (n) {
+    n = parseInt(n, 10);
+    if (n === 1) return '1 osoby';
+    if (n >= 2 && n <= 4) return n + ' osób';
+    return n + ' osób';
+  };
+
+  function formatDatePL(iso) {
+    var d = parseISO(iso);
+    var days = ['niedziela', 'poniedziałek', 'wtorek', 'środa', 'czwartek', 'piątek', 'sobota'];
+    var months = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca',
+                  'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+    return days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    submitted = true;
+
+    var fields = $$('#bookingForm input, #bookingForm select').filter(function (f) { return validators[f.name]; });
+    var firstInvalid = null;
+
+    fields.forEach(function (f) {
+      if (!validateField(f) && !firstInvalid) firstInvalid = f;
+    });
+
+    if (firstInvalid) {
+      firstInvalid.focus();
+      firstInvalid.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      return;
+    }
+
+    // "Zapis" rezerwacji — wyłącznie w pamięci, bez backendu
+    var data = {
+      id: 'FIORI-' + String(reservations.length + 1).padStart(4, '0'),
+      name: $('#bk-name').value.trim(),
+      phone: $('#bk-phone').value.trim(),
+      email: $('#bk-email').value.trim(),
+      date: dateInput.value,
+      time: timeSelect.value,
+      guests: $('#bk-guests').value,
+      notes: notes.value.trim(),
+      createdAt: new Date().toISOString()
+    };
+    reservations.push(data);
+    console.log('[demo] Rezerwacja zapisana w pamięci:', data, '| łącznie:', reservations.length);
+
+    showModal(data);
+    form.reset();
+    submitted = false;
+    $$('.field').forEach(function (f) { f.classList.remove('has-error'); });
+    $$('.field__error').forEach(function (f) { f.textContent = ''; });
+    notesCounter.textContent = 'Pozostało 400 znaków';
+    buildTimeSlots();
+  });
+
+  /* --- modal potwierdzenia --- */
+  var modal = $('#modal');
+  var modalClose = $('#modalClose');
+  var modalSummary = $('#modalSummary');
+  var modalMsg = $('#modalMsg');
+  var lastFocused = null;
+
+  function row(term, value) {
+    var wrap = document.createElement('div');
+    var dt = document.createElement('dt');
+    var dd = document.createElement('dd');
+    dt.textContent = term;
+    dd.textContent = value;   // textContent — brak ryzyka wstrzyknięcia HTML
+    wrap.appendChild(dt);
+    wrap.appendChild(dd);
+    return wrap;
+  }
+
+  function showModal(data) {
+    lastFocused = document.activeElement;
+    modalSummary.innerHTML = '';
+    modalSummary.appendChild(row('Numer', data.id));
+    modalSummary.appendChild(row('Na nazwisko', data.name));
+    modalSummary.appendChild(row('Data', formatDatePL(data.date)));
+    modalSummary.appendChild(row('Godzina', data.time));
+    modalSummary.appendChild(row('Liczba osób', data.guests === '9' ? '9 i więcej' : data.guests));
+    if (data.notes) modalSummary.appendChild(row('Uwagi', data.notes));
+
+    modalMsg.textContent = 'Twoja rezerwacja na ' + formatDatePL(data.date) + ' o godzinie '
+      + data.time + ' dla ' + GUEST_LABEL(data.guests) + ' została przyjęta. '
+      + 'Potwierdzenie wyślemy na adres ' + data.email + '.';
+
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+  }
+
+  function hideModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  modalClose.addEventListener('click', hideModal);
+  modal.addEventListener('click', function (e) { if (e.target === modal) hideModal(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) hideModal();
+    // Pułapka na Tab — fokus nie ucieka poza modal
+    if (e.key === 'Tab' && modal.classList.contains('is-open')) {
+      e.preventDefault();
+      modalClose.focus();
+    }
+  });
+
+  /* ==========================================================
+     F. DROBIAZGI
+     ========================================================== */
+  $('#year').textContent = new Date().getFullYear();
+
+  // Podświetlenie dzisiejszego dnia w tabeli godzin
+  var todayRow = $('#hoursTable tr[data-day="' + new Date().getDay() + '"]');
+  if (todayRow) todayRow.classList.add('is-today');
+
+})();
+</script>
+
+</body>
+</html>
